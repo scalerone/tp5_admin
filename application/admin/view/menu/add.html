@@ -1,0 +1,208 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+
+                <div class="x_content">
+                    <div class="x_content">
+                    <br>
+                    <form id="menu-info-submit"  class="form-horizontal form-label-left" novalidate>
+					<div class="item form-group">
+		                <label class="control-label col-md-3 col-sm-3 col-xs-12">上级菜单 <span class="required">*</span></label>
+		                <div class="col-md-6 col-sm-6 col-xs-12">
+		                    <select class="form-control" id="parentId" name="parentId" required="required">
+		                        <option value="0">作为一级菜单</option>
+		                        
+		                        {$select_categorys}
+		                       
+		                    </select>
+		                </div>
+            		</div>
+                      <div class="form-group item">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="menuName">菜单名称 <sp    an class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="menuName" name="menuName" maxlength="18" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group item">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="showName">显示名称 <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="showName" name="showName" maxlength="18" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group item">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="menuUrl">菜单地址 <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text"  id="menuUrl"  name="menuUrl" maxlength="50" required="required" class="form-control col-md-7 col-xs-12">
+                         	 格式：控制器/方法
+                        </div>
+                      </div>
+                      <div class="form-group ">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="submitUrl">提交地址 
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text"  id="submitUrl"  name="submitUrl" maxlength="50"  class="form-control col-md-7 col-xs-12">
+                         	 格式：控制器/方法
+                        </div>
+                      </div>
+                    
+                      <div class="form-group item">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="menuIcon">图标
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="menuIcon" name="menuIcon" maxlength="50" class="form-control col-md-7 col-xs-12">
+                          <a href="http://www.thinkcmf.com/font/icons" target="_blank">选择图标</a> 不带前缀fa-，如fa-user => user
+                        </div>
+                      </div>
+                      <div class="form-group item">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="intro">备注
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <textarea class="form-control" id="intro" name="intro" rows="3" cols="57" ></textarea>
+                          255字符以内
+                        </div>
+                      </div>
+                    
+                      <div class="form-group" id="leftShowDiv">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">是否左侧菜单 <span class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div id="push_client" class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-default active" for="yes" id="show">
+                              <input type="radio" id="yes" name="leftShow" value="1" checked data-parsley-multiple="leftShow"> &nbsp;是 &nbsp;
+                            </label>
+                            <label class="btn btn-default" for="no"  id="hidden">
+                              <input type="radio" name="leftShow" id="no" value="0" data-parsley-multiple="leftShow"> &nbsp;否&nbsp;
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      
+                       <div id="isleftRouters" class="item form-group" style="display:none;">
+		                <label class="control-label col-md-3 col-sm-3 col-xs-12">同级高亮显示菜单 <span class="required">*</span></label>
+		                <div class="col-md-6 col-sm-6 col-xs-12">
+		                    <select class="form-control"  name="isleftRouters" value="">
+		                       
+		                       
+		                    </select>
+		                </div>
+            		</div>
+            		
+                     <div class="form-group item">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sort">排序 <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input  type="number" id="sort"  name="sort" data-validate-minmax="1,10000" value="100" pattern="numeric" required="required" class="form-control col-md-7 col-xs-12">
+                          数字越大越靠前,数字范围[1-10000]
+                        </div>
+                      </div>
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                          <button type="submit" class="btn btn-success">确认</button>
+                        <a href="javascript:history.back(-1)" class="btn btn-danger">取消</a>
+                        </div>
+                      </div>
+
+                    </form>
+                  </div>
+                </div>
+     
+
+
+{include file='public/rightEnd,public/footer' /}
+<script type="text/javascript">
+$(function(){
+var _isadd=0,$form = $('form'),$leftShowDiv =$("#leftShowDiv");
+$form.on('blur', 'input[required]', validator.checkField);
+
+$.getJSON('/menu/isSubMenu?pid=' + $("#parentId").val()).then(changeleftShowDiv) ;
+
+
+$("#menu-info-submit").on("submit", function(){
+	if(!validator.checkAll($(this))) {
+		return false;
+	}
+	
+	if(_isadd==1){layer.msg('提交中...请稍等片刻！');return false;}
+	_isadd=1;
+    $.ajax({
+        url:"{:url('/admin/menu/add_post')}",
+        data:$(this).serializeArray(),
+        type:"POST",
+        dataType:"json",
+        success: function(v){
+        	_isadd=0;
+        	layer.msg(v.msg) ;
+			_isld=0;	
+			if(v.code==200){
+				setTimeout(function(){window.location.href="{:url('/admin/menu/listPage')}";},1000);
+			}		
+            
+        }
+    });
+    return false;
+});
+$("#hidden").on("click", function(){
+	var pid = $("#parentId").val(),$leftRouters=$("#isleftRouters");
+	if(pid==0){
+		layer.alert("不能隐藏一级菜单") ;
+		return false;
+	}
+	
+	$.getJSON("{:url('/admin/menu/getChildNode')}", { menuId:pid }, function(v){
+		 
+		  if(v.data.length>0){
+			  html = '';
+			  for(i=0;i<v.data.length;i++){
+				  
+			  html += '<option value="'+v.data[i].menuId +'">'+v.data[i].showName+'</option>';
+			  }
+			  
+			  //console.log(html);
+			  $leftRouters.find('select').html(html);
+			  $leftRouters.show();
+		  }
+		  
+	});
+			
+	
+});
+$("#show").on("click", function(){
+	
+	$("#isleftRouters").find('select').html('');
+	$("#isleftRouters").hide();
+	
+	
+});
+
+
+
+
+$("#parentId").on('change',function(){
+    $.getJSON('/menu/isSubMenu?pid=' + $(this).val()).then(changeleftShowDiv) ;
+})
+
+  function changeleftShowDiv(d) {
+            if (200 == d.code) {
+            	$leftShowDiv.hide();
+            	$("#no").attr("checked",true);
+            	$("#yes").attr("checked",false);
+            	
+            } else {
+            	$leftShowDiv.show();
+            	$("#yes").attr("checked",true);
+            	$("#no").attr("checked",false);
+            }
+        }
+
+
+
+})
+
+</script>
+
+
+
+    
+   

@@ -1,0 +1,95 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+
+                <div class="x_content">
+                    <div class="table-responsive">
+                     <form class="form-horizontal">
+                        <div class="col-md-2 col-sm-12 col-xs-12 form-group">
+                        {if condition="(checkPopedom('/admin/slides/add')) "}
+                    	<a href="{:url('/admin/slides/add')}" class="btn btn-sm btn-success" ><i class="fa fa-plus-square"></i> 新增</a>
+                       {/if}
+                    	</div>
+                    	
+                    	<div class="col-md-2 col-sm-12 col-xs-12 form-group pull-right">
+			                <select  x-listen  class="form-control form-param-to" name="typeStatus">
+			                    <option value="0">所属页面</option>
+			                    {volist name="$model->statusArray" id="vo"}
+			                    <option value="{$key}" {$key==$param.typeStatus?"selected":""}>{$vo}</option>
+			                    {/volist}
+			                </select>
+			           	 </div>
+                    	 
+
+                   </form>
+                        <table class="table table-striped jambo_table bulk_action">
+                        <thead>
+							<tr class="headings">
+								<!-- <th>
+									<input type="checkbox" id="check-all" class="flat">
+								</th> -->
+								<th class="column-title">ID </th>
+								<th class="column-title">图片名称</th>
+								<th class="column-title">所属页面</th>
+								<th class="column-title">图片 </th>
+								<th class="column-title">跳转链接 </th>
+								<th class="column-title">是否新开窗口</th>
+								<th class="column-title">排序</th>
+								<th class="column-title">创建时间 </th>
+								<th class="column-title no-link last"><span class="nobr">操作</span>
+								</th>
+							</tr>
+                        </thead>
+                        <tbody>
+                            {volist name="$page->items()" id="vo"}
+								<tr class="even pointer">
+								<!-- 	<td class="a-center ">
+									    <input type="checkbox" class="flat" name="table_records">
+									</td> -->
+									<td class=" ">{$vo.id}</td>
+									<td class=" ">{$vo.Vc_name|cutstrnohtml=16}</td>
+									<td class=" ">{$model->statusArray[$vo.I_type]}</td>
+									<td class=" ">
+										<a href="{$Think.config.img_url}{$vo.Vc_path}" target="_blank"><img src="{$Think.config.img_url}{$vo.Vc_path}" height="50" width="64" ></a></td>
+									<td class=" ">{$vo.Vc_linkurl|cutstrnohtml=16}</td>
+									<td class=" ">{if condition="($vo.I_blank==1)"}是{else}否{/if}</td>
+									<td class=" ">{$vo.I_order}</td>
+									<td class=" ">{$vo.Createtime}</td>
+									<td class=" last">
+								{if condition="(checkPopedom('/admin/slides/edit')) "}
+                            <a href="{:url('admin/slides/edit',['id'=>$vo.id])}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> 编辑</a>
+                            {/if}
+                            {if condition="(checkPopedom('/admin/slides/del')) "}
+                            <a href="javascript:void(0);" data-href="{:url('admin/slides/del',['id'=>$vo.id])}"  class="btn btn-danger btn-xs js-ajax-delete"  ><i class="fa fa-trash-o"></i> 删除 </a>
+                        	 {/if}
+									</td>
+								</tr>
+                            {/volist}
+                        </tbody>
+                        </table>
+                    </div>
+                    {$page->render()}
+                </div>
+
+
+{include file='public/rightEnd,public/footer' /}
+
+<script type="text/javascript">
+
+
+$(document).ready(function(){
+	
+    $('select[x-listen]').change(onListPageSelectionChange) ;
+    
+    
+    
+}) ;
+
+
+
+
+</script>
+
+
+
+
+

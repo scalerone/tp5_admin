@@ -1,0 +1,190 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+
+                <div class="x_content">
+                    <div class="x_content">
+                    <br>
+                    <form id="configure-info-submit"  class="form-horizontal form-label-left" novalidate>
+					<input type="hidden" name="id" value="{$data.id}" />
+					<input type="hidden" name="code" value="{$data.code}" />
+                      <div class="form-group item">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12 ">参数代码 <span class="required">*</span></label>
+                          <div class="col-md-6 col-sm-6 col-xs-12 ">
+                              <label class='control-label'>{$data.code}</label>
+                          </div>
+                      </div>
+                        <div class="form-group item">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12 ">参数类型 <span class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ">
+                                <label class='control-label'>
+                                    <input type="hidden" class='cfgtype' value="{$data.conf_type}">
+                                    {if condition="($data.conf_type=='text')"}文本{/if}
+                                    {if condition="($data.conf_type=='image')"}图片{/if}
+                                </label>
+                            </div>
+                        </div>
+                      <div class="form-group item">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >参数用途 <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12 ">
+                              <label class='control-label'>{$data.note}</label>
+                          </div>
+                      </div>
+                        <div class="form-group item ishide text" >
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">参数值 <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <textarea rows="5"  class="form-control">{$data.value}</textarea>
+                                <div class="Validform_checktip"></div>
+
+                            </div>
+                        </div>
+                        <div class="form-group ishide image">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12"  >图片<span class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+		                    <span class="btn btn-success fileinput-button">
+		                        <i class="fa  fa-plus"></i>
+		                        <span>选择文件</span>
+		                        <input type="file" name="value_file" x-file-up >
+		                        <input type="hidden" x-file-input  value="{$data.value}" />
+		                    </span>
+                                <div class="fileContainer"></div>
+                            </div>
+                        </div>
+
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                          <button type="submit" class="btn btn-success">确认</button>
+                          <a href="{:url('/configure/listPage')}" class="btn btn-danger">取消</a>
+                        </div>
+                      </div>
+
+                    </form>
+                  </div>
+                </div>
+
+
+
+{include file='public/rightEnd,public/footer' /}
+<script type="text/javascript">
+
+    var re=$('.cfgtype').val();
+    if(re=='text'){
+        $(".text").show();
+        $(".image").hide();
+        $('textarea').attr({'name':'value'})
+    }
+    else if(re=='image'){
+        $(".text").hide();
+        $(".image").show();
+        $('input[x-file-input]').attr('name','value')
+        $('textarea').html('');
+
+    }
+    $('select').change(function () {
+        var sel=$('select').val();
+        console.log(sel);
+        if(sel=='text'){
+            $(".text").show();
+            $(".image").hide();
+            $('textarea').attr({'name':'value'})
+            $('input[x-file-input]').removeAttr('name')
+        }
+        else if(sel=='image'){
+            $(".text").hide();
+            $(".image").show();
+            $('textarea').removeAttr('name')
+            $('textarea').removeAttr('required')
+            $('textarea').removeAttr('datatype')
+            $('textarea').removeAttr('errormsg')
+            $('input[x-file-input]').attr('name','value')
+        }else{
+            $(".text").hide();
+            $(".image").hide();
+        }
+    })
+
+    var $form = $('form') ; isSubmited = false ,
+            url = "{:url('/admin/file_upload/doUpload')}" ,
+            tpl = new xxx.STemplate("<p><a href='@{src}' target='_blank'><img src='@{src}' style='width:200px;height:200px;'/></a></p>") ,
+            uploadButton = $('<button onclick="return false;"/>')
+                    .addClass('btn btn-primary')
+                    .prop('disabled', true)
+                    .text('处理中...')
+                    .on('click', function () {
+                        var $this = $(this),
+                                data = $this.data();
+                        $this
+                                .off('click')
+                                .text('Abort')
+                                .on('click', function () {
+                                    $this.remove();
+                                    data.abort();
+                                });
+                        data.submit().always(function () {
+                            $this.remove();
+                        });
+                    });
+    deleteButton = $('<button onclick="return false;"/>')
+            .addClass('btn btn-danger')
+            .text('删除')
+            .on('click', function () {
+                var $this = $(this) ;
+                console.log(this)
+                $this.parents('.form-group').find('[x-file-input]').val(-1) ;
+                $this.parents('.fileContainer').empty() ;
+            });
+
+
+var demo = $("#configure-info-submit").Validform({
+
+	tiptype:3,
+	showAllError:true,
+		});
+
+
+var _isadd=0,$form = $('form');
+$form.on('blur', '*[required]', validator.checkField);
+$("#configure-info-submit").on("submit", function(){
+
+
+	if(!validator.checkAll($(this))) {
+		return false;
+	}
+	if(!demo.check()){
+		return false;
+	}
+    var sel=$('select').val();
+    if(sel=='image'){
+        var photo = $("input[name='value']").val();
+        if(photo==null||photo==''||photo==-1||photo==undefined){
+            layer.alert("未上传图片！ ");
+            return false;
+        }
+
+    }
+	if(_isadd==1){layer.msg('提交中...请稍等片刻！');return false;}
+	_isadd=1;
+    $.ajax({
+        url:"{:url('/admin/configure/edit')}",
+        data:$(this).serializeArray(),
+        type:"POST",
+        dataType:"json",
+        success: function(v){
+        	_isadd=0;
+        	layer.msg(v.msg) ;
+			_isld=0;
+			if(v.code==200){
+				setTimeout(function(){window.location.href="{:url('/admin/configure/listPage')}";},1000);
+			}
+
+        }
+    });
+    return false;
+});
+
+
+
+
+</script>

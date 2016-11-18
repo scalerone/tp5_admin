@@ -1,0 +1,51 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+
+                <div class="x_content">
+                    <div class="table-responsive">
+                    <a href="{:url('/admin/menu/add')}" class="btn btn-sm btn-success" ><i class="fa fa-plus-square"></i> 新增</a>
+                        <table class="table table-striped jambo_table bulk_action">
+                        <thead>
+							<tr class="headings">
+								
+								<th class="column-title">ID </th>
+								<th class="column-title">名称 </th>
+								<th class="column-title">链接地址 </th>
+								<th class="column-title">排序 </th>
+								<th class="column-title">状态 </th>
+								<th class="column-title">创建时间 </th>
+								<th class="column-title no-link last"><span class="nobr">操作</span>
+								</th>
+								
+							</tr>
+                        </thead>
+
+                        <tbody>
+                            {volist name="$list->items()" id="vo"}
+								<tr class="even pointer">
+									
+									<td class=" ">{$vo.menuId}</td>
+									<td class=" ">{$vo.showName}</td>
+									<td class=" ">{$vo.menuUrl}</td>
+									<td class=" ">{$vo.sort}</td>
+									<td class=" ">{$vo.leftShow==1?'显示':'隐藏'}</td>
+									<td class=" ">{$vo.Createtime}</td>
+									<td class="last">
+								
+                            <a href="{:url('admin/menu/edit',['id'=>$vo.menuId])}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> 编辑</a>
+                            <a href="javascript:void(0);" data-href="{:url('admin/menu/del',['id'=>$vo.menuId])}"  class="btn btn-danger btn-xs js-ajax-delete"  ><i class="fa fa-trash-o"></i> 删除 </a>
+									{if condition="$vo.parentId==0"}
+							 <a href="{:url('admin/menu/add',['id'=>$vo.menuId])}" class="btn btn-primary btn-xs"><i class="fa fa-plus-square"></i> 添加子菜单</a> 
+							 {/if}
+									</td>
+								</tr>
+                            {/volist}
+                        </tbody>
+                        </table>
+                    </div>
+                    {$list->render()}
+                </div>
+      
+
+
+{include file='public/rightEnd,public/footer' /}

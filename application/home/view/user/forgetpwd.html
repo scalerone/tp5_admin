@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>云采网 - 找回密码</title>
+		{include file='public/head' /}
+	</head>
+	<body>
+		{include file='public/top-normal' /}
+		<!-- content -->
+		<div class="content project-content">
+			<div class="w1200 cc inner">
+				<ul class="process-line rember-process w1100 cc tac ib-li">
+					<li class="active">
+						<div class="bg">
+							<span>1</span>
+						</div>
+						<p>输入手机号</p>
+					</li>
+					<li class="middle">
+						<div class="bg">
+							<span>2</span>
+						</div>
+						<p>输入新密码</p>
+					</li>
+					<li>
+						<div class="bg">
+							<span>3</span>
+						</div>
+						<p>完成</p>
+					</li>
+				</ul>
+				<!--form-->
+				<div class="rember-form">
+					<form  method="post" action="{:url('doForgetpwd')}" data-success="密码找回成功，请牢记你的新密码" id="remberForm">
+						<div class="step step1">
+							<div class="form-items">
+								<span class="form-items-title"><em class="warring">*</em>手机号</span>
+								<input type="text" name="mobile" tabindex="1" maxlength="11"/>
+							</div>
+							<div class="form-items">
+								<span class="form-items-title"><em class="warring">*</em>验证码</span>
+								<input type="text"  class="yzm" name="code" maxlength="4" tabindex="2" tabindex="2"/>
+								<input type="hidden"  id="codeid" name="codeid" value=""/>
+								<img id="verify_img" src="{:captcha_src()}" alt="验证码" onclick="refreshVerify()">
+			                	<a href="javascript:refreshVerify()" class="menu">点击刷新</a>
+							</div>
+							<!--ajaxpost请求 {:url('doCaptcha')}，code和codeid参数，网站验证码校验通过后才能获取手机验证码，注意获取短信验证码倒计时60秒 -->
+							<div class="form-items">
+								<span class="form-items-title"><em class="warring">*</em>短信验证码</span>
+								<input type="text" name="sms_code" id="sms_code" class="yzm" tabindex="3" maxlength="6"/>
+								<button type="button" class="menu" id="getCode">获取验证码</button>
+							</div>
+							<div class="form-submit">
+								<a href="javascript:;" class="form-submit-menu" id="next">下一步</a>
+							</div>
+							<!--ajaxpost请求 {:url('doMobilecode')}，sms_code参数，短信验证码通过后隐藏div -->
+						</div>
+						<!-- step2 -->
+						<div class="step step2 hide">
+							<div class="form-items">
+								<span class="form-items-title"><em class="warring">*</em>新密码</span>
+								<input type="password" name="password" data-rule="新密码: required; password; !digits; length[6~];" 
+								data-msg-digits="{0}不能使用纯数字" data-msg-length="{0}至少6位" maxlength="18"/>
+							</div>
+							<div class="form-items">
+								<span class="form-items-title"><em class="warring">*</em>确认新密码</span>
+								<input type="password" name="repassword" data-rule="确认密码: required;match(password);" maxlength="18"/>
+							</div>
+							<div class="form-submit">
+								<button type="submit" class="form-submit-menu" id="submit">提交修改</button>
+							</div>
+						</div>
+					<!-- step2 -->
+					</form>
+					<!--form-->
+					<div class="findpass-success step3 hide">
+						<p>密码修改成功，请牢记你的新密码!<a href="/user/login">点击返回</a></p>
+					</div>
+					<!--/form-->
+				</div>
+				<!--/form-->
+			</div>
+		</div>
+		<!-- content -->
+		{include file='public/foot-normal' /}
+		<script src="//cdn.bootcss.com/nice-validator/1.0.7/jquery.validator.min.js"></script>
+		<script src="//cdn.bootcss.com/nice-validator/1.0.7/local/zh-CN.min.js"></script>
+		<script>
+			$(function(){
+				window.refreshVerify = function() {
+			        var ts = Date.parse(new Date())/1000;
+			        var img = document.getElementById('verify_img');
+			        var id = document.getElementById('codeid');
+			        img.src = "/user/captcha?id="+ts;
+			        id.value=ts;
+			    }
+				var $form = $("#remberForm");
+				
+				$("#getCode").on("click", function(){
+					var $this = $(this);
+
+					if($("input[name='code']").val() == "") {
+						layer.msg("验证码不能为空",{time:1500});
+						return false;
+					}
+										
+					$.post('{:url('doCaptcha')}', {codeid: $("#codeid").val(),code:$("input[name='code']").val()}).then(function(res){
+						if(res.code == 500) {
+							layer.msg("验证码输入不正确,请检查",{time:1500});
+						} else {
+							$this.attr("disabled","true").html("发送中");
+							if(res.code == 200) {
+								$.post("{:url('user/sendforgetsms')}",{mobile:$("input[name='mobile']").val()}).then(function(res){
+									if(res.code == 200) {
+										layer.msg("验证码已发送，请注意查收手机短信",{time:1500});
+										$this.trigger('countDown');
+									} else {
+										layer.msg(res.msg,{time:1500});
+									}
+								}).fail(function(){
+									$this.removeAttr("disabled").html("获取验证码");
+									layer.msg("服务器罢工了，请联系管理员",{time:1500});
+								});
+
+							} else {
+								$this.removeAttr("disabled").html("获取验证码");
+								layer.msg(data.msg,{time:1500});
+							}
+						}
+					});
+
+				})
+
+				// 下一步
+				$("#next").on("click", function(){
+					$.post('{:url('doMobilecode')}', {sms_code:$("#sms_code").val()}).then(function(res){
+						if(res.code == 200) {
+							$form.trigger('step2');
+						} else {
+							layer.msg("手机验证码输入不正确，请检查",{time:1500});
+						}
+					});
+				});
+
+				$("#getCode").on("countDown", function(){
+					var $this = $(this),
+						time = 60;
+
+					// $this.attr("disabled","true");
+
+					var timer = setInterval(function(){
+						$this.html((--time)+"s后可重新发送");
+						if(time == 0) {
+							clearInterval(timer);
+							$this.removeAttr("disabled").html("获取验证码");
+						}
+					},1000);
+				});
+				
+				// 第三步
+				// 验证
+				$("#remberForm").bind('valid.form', function(ev){
+					$.post('{:url('doForgetpwd')}',$form.serialize()).then(function(res){
+						if(res.code == 200) {
+							$form.trigger('step3');
+						} else {
+							layer.msg(res.msg,{time:1500});
+							$form.trigger('step1');
+							refreshVerify();
+						}
+					});
+					ev.preventDefault();
+				});
+				
+				// 不同步骤显示不同的块
+				var $step1 = $("div.step1"),
+					$step2 = $("div.step2"),
+					$step3 = $("div.step3"),
+					$process = $(".process-line li");
+
+				$form.on("step1", function(){
+					$step1.show().siblings('').hide();
+					$process.eq(0).addClass('active').siblings('li').removeClass('active');
+				});
+
+				$form.on("step2", function(){
+					$step2.show().siblings('').hide();
+					$process.eq(1).addClass('active');
+					$process.eq(2).removeClass('active');
+				});
+
+				$form.on("step3", function(){
+					$step3.show().siblings('').hide();
+					$process.eq(2).addClass('active');
+				});
+				
+			});
+	 </script>
+	</body>
+</html>

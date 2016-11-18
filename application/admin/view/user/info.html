@@ -1,0 +1,84 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+
+<div class="x_content">
+   <br>
+   <form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+
+     <div class="form-group">
+       <label class="control-label col-md-3 col-sm-3 col-xs-12 info-tit-lable">用户名 <span class="">:</span></label>
+       <div class="col-md-6 col-sm-6 col-xs-12 info-text-div">{$data.Vc_name}
+       </div>
+     </div>
+     <div class="form-group">
+       <label class="control-label col-md-3 col-sm-3 col-xs-12 info-tit-lable">手机号 <span class="">:</span></label>
+       <div class="col-md-6 col-sm-6 col-xs-12 info-text-div">{$data.Vc_mobile}    
+       
+      
+       </div>
+     </div>
+     
+     <div class="form-group">
+       <label class="control-label col-md-3 col-sm-3 col-xs-12 info-tit-lable">性别 <span class="">:</span></label>
+       <div class="col-md-6 col-sm-6 col-xs-12 info-text-div">
+       
+       		{if condition="($data.I_sex==1) "}男{else}女{/if}
+       
+       
+       </div>
+     </div>
+    
+     <div class="form-group">
+       <label class="control-label col-md-3 col-sm-3 col-xs-12 info-tit-lable">所在地地址<span class="">:</span></label>
+       <div class="col-md-6 col-sm-6 col-xs-12 info-text-div">
+        {if condition="empty($data.I_provinceID) "}
+         	未填写
+         {else}
+       		{$data.proname}{$data.cityname}{$data.areaname}{$data.Vc_address}
+       	{/if}
+       </div>
+     </div>
+     
+     <div class="form-group">
+       <label class="control-label col-md-3 col-sm-3 col-xs-12 info-tit-lable">邮箱<span class="">:</span>
+       </label>
+       <div class="col-md-6 col-sm-6 col-xs-12 info-text-div">
+       {$data.Vc_Email==null?'未填写':$data.Vc_Email}
+       
+       </div>
+     </div>
+     
+     <div class="form-group">
+       <label class="control-label col-md-3 col-sm-3 col-xs-12 info-tit-lable">上次登录时间 <span class="">:</span>
+       </label>
+       <div class="col-md-6 col-sm-6 col-xs-12 info-text-div">{$data.Dt_lastlogintime}
+       </div>
+     </div>
+     <div class="form-group">
+       <label class="control-label col-md-3 col-sm-3 col-xs-12 info-tit-lable">登录IP<span class="">:</span>
+       </label>
+       <div class="col-md-6 col-sm-6 col-xs-12 info-text-div">{$data.Vc_lastloginIP}
+       </div>
+     </div>
+     
+           
+    
+     <div class="form-group">
+         <label class="control-label col-md-3 col-sm-3 col-xs-12 info-tit-lable">冻结状态 <span class="">:</span></label>
+         <div class="col-md-6 col-sm-6 col-xs-12 info-text-div">
+         	{if condition="($data.I_islock==1) "}冻结{else}可用{/if}
+         </div>
+     </div>
+     
+     <div class="ln_solid"></div>
+     <div class="form-group">
+       <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+         <button type="button" class="btn btn-primary btn-back">返回</button>
+       </div>
+     </div>
+     
+   </form>
+</div>
+
+
+{include file='public/rightEnd,public/footer' /}

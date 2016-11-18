@@ -1,0 +1,10 @@
+<ul class="list">
+    {volist name="slide" id="vo"}
+        <li{if condition="$key==0"} class="active"{/if} style="background-image: url({$Think.config.img_url}{$vo.Vc_path});"><a {$vo.Vc_linkurl==null?'':'href="'.$vo.Vc_linkurl.'"'.($vo.I_blank==1?'target="_blank"':'')}></a></li>
+    {/volist}
+</ul>
+<ul class="btn">
+    {volist name="slide" id="li"}
+        <li{if condition="$key==0"} class="active"{/if}></li>
+    {/volist}
+</ul>

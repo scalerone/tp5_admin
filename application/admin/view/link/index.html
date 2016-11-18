@@ -1,0 +1,125 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+
+                <div class="x_content">
+                    <div class="table-responsive">
+                     <form class="form-horizontal">
+                        <div class="col-md-2 col-sm-12 col-xs-12 form-group">
+                        {if condition="(checkPopedom('/admin/link/add')) "}
+                    	<a href="{:url('/admin/link/add')}" class="btn btn-sm btn-success" ><i class="fa fa-plus-square"></i> 新增</a>
+                       {/if}
+                    	</div>
+                    	 
+
+                   </form>
+                        <table class="table table-striped jambo_table bulk_action">
+                        <thead>
+							<tr class="headings">
+								<!-- <th>
+									<input type="checkbox" id="check-all" class="flat">
+								</th> -->
+								<th class="column-title">ID </th>
+								<th class="column-title">名称</th>
+								<th class="column-title">栏目</th>
+								<th class="column-title">图片</th>
+								<th class="column-title">链接</th>
+								<th class="column-title">排序</th>
+								<th class="column-title">创建时间 </th>
+								<th class="column-title no-link last"><span class="nobr">操作</span>
+								</th>
+							</tr>
+                        </thead>
+
+                        <tbody>
+                            {volist name="$page->items()" id="vo"}
+								<tr class="even pointer">
+								<!-- 	<td class="a-center ">
+									    <input type="checkbox" class="flat" name="table_records">
+									</td> -->
+									<td class=" ">{$vo.id}</td>
+									<td class=" "><a href="{$vo.Vc_link}#" target="_blank">{$vo.Vc_name|cutstrnohtml=16}</a></td>
+									<td class=" ">{$model->typeArray[$vo.I_type]}</td>
+									<td class=" ">
+										<a href="{$Think.config.img_url}{$vo.Vc_logo}" target="_blank"><img src="{$Think.config.img_url}{$vo.Vc_logo}" height="50" width="64" ></a></td>
+									<td class=" ">{$vo.Vc_link|cutstrnohtml=50}</td>
+									<td class=" ">{$vo.I_order}</td>
+									<td class=" ">{$vo.Createtime}</td>
+									<td class=" last">
+								{if condition="(checkPopedom('/admin/link/edit')) "}
+                            <a href="{:url('admin/link/edit',['id'=>$vo.id])}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> 编辑</a>
+                            {/if}
+                            {if condition="(checkPopedom('/admin/link/del')) "}
+                            <a href="javascript:void(0);" data-href="{:url('admin/link/del',['id'=>$vo.id])}"  class="btn btn-danger btn-xs js-ajax-delete"  ><i class="fa fa-trash-o"></i> 删除 </a>
+                        	 {/if}
+									</td>
+								</tr>
+                            {/volist}
+                        </tbody>
+                        </table>
+                    </div>
+                    {$page->render()}
+                </div>
+
+
+{include file='public/rightEnd,public/footer' /}
+
+<script type="text/javascript">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+$(function(){
+	var _isld=0;
+	
+	 $('a.js-ajax-delete').click(function(){
+		
+		if(_isld==1){layer.msg('提交中...请稍等片刻！');return false;}
+		var href=$(this).attr('data-href');
+		layer.confirm('确认要删除吗？', {
+			icon: 3, 
+			btn: ['确认','取消'], //按钮
+			title:'提示',
+			}, function(index){
+  			  layer.close(index);
+  			 _isld=1;
+  			 
+  			$.getJSON(href, function(v){
+  				layer.msg(v.msg) ;
+				_isld=0;	
+				if(v.code==200){
+					setTimeout(function(){window.location.reload()},1000);
+					
+				}		
+  			});
+  
+		});
+		
+
+
+		});
+	 
+	
+	
+	
+});*/
+
+</script>
+
+
+
+
+

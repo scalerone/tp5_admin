@@ -1,0 +1,271 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+
+                <div class="x_content">
+                    <br>
+                    <form id="configure-info-submit"  class="form-horizontal form-label-left" novalidate>
+
+                      <div class="form-group item ">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >图片名称 <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text"  name="Vc_name" datatype="*1-30"  errormsg="至少1个字符,最多30个字符！" value="{$data.Vc_name}" maxlength="50" required="required" class="form-control col-md-7 col-xs-12">
+                        <div class="Validform_checktip"></div>
+                        </div>
+                      </div>
+                       <div class="form-group item">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">所属页面<span class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <select class="form-control "  name="I_type" required>
+                                    <option value="">选择页面</option>
+                                     {volist name="$model->statusArray" id="vo"}
+				                    <option value="{$key}" {$key==$data.I_type?"selected":""} >{$vo}</option>
+				                    {/volist}
+                                </select>
+                            </div>
+                        </div>
+                      
+                       
+                        <div class="form-group item" >
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12"  >图片<span class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+		                    <span class="btn btn-success fileinput-button">
+		                        <i class="fa  fa-plus"></i>
+		                        <span>选择文件</span>
+		                        <input type="file" name="Vc_pic_file" x-file-up >
+		                        <input type="hidden" x-file-input name="Vc_pic"  value="{$data.Vc_path}" />
+		                    </span>
+                                <div class="fileContainer"></div>
+                            </div>
+                        </div>
+                         <div class="form-group item ">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" >跳转链接
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text"  name="Vc_linkurl"value="{$data.Vc_linkurl}" class="form-control col-md-7 col-xs-12">
+                                       标准格式为http://www.xxx.com/xxx
+                                <div class="Validform_checktip"></div>
+                            </div>
+                        </div>
+                        <div class="form-group" id="leftShowDiv">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">是否新开窗口 <span class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div id="push_client" class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-default {if condition="$data.I_blank==1"} active {/if}" for="yes" id="show">
+                                    <input type="radio" id="yes" name="I_blank" value="1" {if condition="$data.I_blank==1"} checked {/if} > &nbsp;是 &nbsp;
+                                    </label>
+                                    <label class="btn btn-default {if condition="$data.I_blank==0"} active {/if} " for="no" id="hidden">
+                                    <input type="radio" name="I_blank" id="no" value="0" {if condition="$data.I_blank==0"} checked {/if}> &nbsp;否&nbsp;
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group item">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sort">排序 <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input  type="number" id="sort"  name="I_order" data-validate-minmax="1,10000" value="{$data.I_order}" pattern="numeric" required="required" class="form-control col-md-7 col-xs-12">
+                                数字越大越靠前,数字范围[1-10000]
+                            </div>
+                        </div>
+
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                        <input type="hidden" name="id" value="{$data.id}">
+                          <button type="submit" class="btn btn-success">确认</button>
+                          <a href="javascript:history.back(-1)" class="btn btn-danger">取消</a>
+                        </div>
+                      </div>
+
+                    </form>
+                </div>
+     
+
+
+{include file='public/rightEnd,public/footer' /}
+
+<script type="text/javascript">
+
+
+    var $form = $('form') ; isSubmited = false ,
+            url = "{:url('/admin/file_upload/doUpload')}" ,
+                tpl = new xxx.STemplate("<p><a href='@{src}' target='_blank'><img src='@{src}' style='width:200px;height:200px;'/></a></p>") ,
+            uploadButton = $('<button onclick="return false;"/>')
+                    .addClass('btn btn-primary')
+                    .prop('disabled', true)
+                    .text('处理中...')
+                    .on('click', function () {
+                        var $this = $(this),
+                                data = $this.data();
+                        $this
+                                .off('click')
+                                .text('Abort')
+                                .on('click', function () {
+                                    $this.remove();
+                                    data.abort();
+                                });
+                        data.submit().always(function () {
+                            $this.remove();
+                        });
+                    });
+    deleteButton = $('<button onclick="return false;"/>')
+            .addClass('btn btn-danger')
+            .text('删除')
+            .on('click', function () {
+                var $this = $(this) ;
+                console.log(this)
+                $this.parents('.form-group').find('[x-file-input]').val(-1) ;
+                $this.parents('.fileContainer').empty() ;
+            });
+    $('[x-file-up]').fileupload({
+        // $('input[type=file]').fileupload({
+        url: url,
+        dataType: 'json',
+        autoUpload: false,
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+        maxFileSize: 999000,
+        // Enable image resizing, except for Android and Opera,
+        // which actually support image resizing, but fail to
+        // send Blob objects via XHR requests:
+        disableImageResize: /Android(?!.*Chrome)|Opera/
+                .test(window.navigator.userAgent),
+        previewMaxWidth: 200,
+        previewMaxHeight: 200,
+        previewCrop: true
+    }).on('fileuploadadd', function (e, data) {
+        var $dom = $('input[name="' + data.paramName + '"]')
+                .parents('.fileinput-button').next('.fileContainer') ;
+        data.context = $('<div/>').appendTo($dom.empty());
+        $.each(data.files, function (index, file) {
+            var node = $('<p/>')
+                    .append($('<span/>').text(file.name));
+            if (!index) {
+                node
+                        .append('<br>')
+                        .append(uploadButton.clone(true).data(data));
+            }
+            node.appendTo(data.context);
+        });
+    }).on('fileuploadprocessalways', function (e, data) {
+        var index = data.index,
+                file = data.files[index],
+                node = $(data.context.children()[index]);
+        if (file.preview) {
+            node
+                    .prepend('<br>')
+                    .prepend(file.preview);
+        }
+        if (file.error) {
+            node
+                    .append('<br>')
+                    .append($('<span class="text-danger"/>').text(file.error));
+        }
+        if (index + 1 === data.files.length) {
+            data.context.find('button')
+                    .text('上传')
+                    .prop('disabled', !!data.files.error);
+        }
+    }).on('fileuploadprogressall', function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $('#progress .progress-bar').css(
+                'width',
+                progress + '%'
+        );
+    }).on('fileuploaddone', function (e, data) {
+        if (data.result && data.result.code == 200) {
+            var img = data.result.data[0] ,
+                    inputName = $(this).attr('name').replace('_file','') ,
+                    $input = $('input[name="'+inputName+'"]') ,
+                    $dom = $(this).parents('.fileinput-button').next('.fileContainer') ,
+                    $delBtn = deleteButton.clone(true) ;
+            $input.val(img.saveName) ;
+            $dom.append($delBtn) ;
+        }
+
+       
+    }).on('fileuploadfail', function (e, data) {
+        $.each(data.files, function (index) {
+            var error = $('<span class="text-danger"/>').text('File upload failed.');
+            $(data.context.children()[index])
+                    .append('<br>')
+                    .append(error);
+        });
+    }).prop('disabled', !$.support.fileInput)
+            .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+
+
+
+    /************ 上传部分完毕 ************/
+
+    $('[x-file-input]').each(setSavedImage) ;
+
+
+    function setSavedImage () {
+        var $this = $(this) , val = $this.val() , imgHost = "{$Think.config.img_url}" ,
+                $container = $this.parents('.fileinput-button').next('.fileContainer') ,$img ;
+        if (val && val.length > 10) {
+            $img = $(tpl.update({'src':imgHost+val}).html()) ;
+            $img.appendTo($container) ;
+            // $container.after() ;
+            deleteButton.clone(true).appendTo($container) ;
+        }
+    }
+
+var demo = $("#configure-info-submit").Validform({
+	
+	tiptype:3,
+	//label:"#first-name1",
+	showAllError:true,
+		});
+		
+
+ var _isadd=0,$form = $('form');
+$form.on('blur', '*[required]', validator.checkField);
+
+$("#configure-info-submit").on("submit", function(){
+	//console.log(demo.check());
+	if(!demo.check()){
+		return false;
+	}
+	if(!validator.checkAll($(this))) {
+		return false;
+	}
+
+      var photo = $("input[name='Vc_pic']").val();
+      if(photo==null||photo==''||photo==-1||photo==undefined){
+          layer.alert("未上传图片！ ");
+          return false;
+      }
+
+
+	if(_isadd==1){layer.msg('提交中...请稍等片刻！');return false;}
+	_isadd=1;
+    $.ajax({
+        url:"{:url('admin/slides/edit')}",
+        data:$(this).serializeArray(),
+        type:"POST",
+        dataType:"json",
+        success: function(v){
+        	_isadd=0;
+        	layer.msg(v.msg) ;
+			_isld=0;	
+			if(v.code==200){
+				setTimeout(function(){window.location.href="{:url('/admin/slides/index')}";},1000);
+			}		
+            
+        }
+    });
+    return false;
+});
+ 
+
+
+
+</script>
+
+
+
+    
+   

@@ -1,0 +1,11 @@
+<?php
+
+//管理员session
+define('SESSION_ADMIN_USER', 'SESSION_ADMIN_USER');
+//管理员菜单session
+define('SESSION_ADMIN_USER_MENUS', 'SESSION_ADMIN_USER_MENUS');
+//当前访问的菜单
+define('SESSION_ADMIN_USER_MENU_NOW', 'SESSION_ADMIN_USER_MENU_NOW');
+//登陆错误次数session
+define('SESSION_ADMIN_LOGIN_ERROR', 'SESSION_ADMIN_LOGIN_ERROR');
+

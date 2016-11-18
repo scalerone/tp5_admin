@@ -1,0 +1,163 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+
+                <div class="x_content">
+               		<div class="table-responsive">
+               		
+         <form id="searchForm" class="form-horizontal adminuserform">
+            <div class="col-md-2 col-sm-12 col-xs-12 form-group">
+            	{if condition="(checkPopedom('/admin/adminuser/add')) "}
+                <a href="{:url('/admin/adminuser/add')}" class="btn btn-sm btn-success" type="button"><i class="fa fa-plus-square"></i> 新增</a>
+                {/if}
+            </div>
+            <div class="input-group col-md-3 col-sm-4 col-xs-12 form-group pull-right">
+                <input type="text" name="uname" class="form-control form-param-to" placeholder="请输入用户名" value="{$param.uname}">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="searchButton">搜索</button>
+                </span>
+            </div>
+            <div class="input-group col-md-2 col-sm-4 col-xs-12 form-group pull-right">
+                <input type="text" name="mobile" class="form-control form-param-to" placeholder="请输入手机号" value="{$param.mobile}">
+            </div>
+          
+            
+        </form>
+                        <table class="table table-striped jambo_table bulk_action">
+                        <thead>
+							<tr class="headings">
+								<!-- <th>
+									<input type="checkbox" id="check-all" class="flat">
+								</th> -->
+								<th class="column-title">ID</th>
+								<th class="column-title">用户名</th>
+				                  <th class="column-title">真实姓名</th>
+				                  <th class="column-title">手机号码</th>
+				                  <th class="column-title">创建人</th>
+				                  <th class="column-title">是否可用 </th>
+				                  <th class="column-title">创建时间 </th>
+				                  <th class="column-title">最后登陆时间 </th>
+				                  <th class="column-title no-link last"><span class="nobr">操作</span></th>
+				                  
+				                  <th class="bulk-actions" colspan="8">
+				                    <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+				                  </th>
+							</tr>
+                        </thead>
+
+                        <tbody>
+                        	 {volist name="page->items()" id="vo"}
+				                 <tr class="even pointer">
+									<!-- <td class="a-center ">
+									    <input type="checkbox" class="flat" name="table_records">
+									</td> -->
+									<td class=" ">{$vo.userId}</td>
+									<td class=" ">{$vo.userName}</td>
+				                     <td class=" ">{$vo.realName}</td>
+				                     <td class=" ">{$vo.mobile}</td>
+				                     <td class=" ">{$vo.inviterUserName}</td>
+				                     <td class=" ">{if condition="($vo.approved==1)"}是{else}否{/if}</td>
+				                     <td class="a-right a-right ">{$vo.Createtime}</td>
+				                     <td class="a-right a-right ">{$vo.lastLoginDate}</td>
+									<td class=" last">
+								{if condition="(checkPopedom('/admin/adminuser/info')) "}
+                            <a href="{:url('/admin/adminuser/info',['id'=>$vo.userId])}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> 查看</a>
+                            	{/if}
+                            	{if condition="(checkPopedom('/admin/adminuser/edit')) "}
+                            <a href="{:url('/admin/adminuser/edit',['id'=>$vo.userId])}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> 编辑</a>
+                           		{/if}
+                           		{if condition="(checkPopedom('/admin/adminuser/delAjax')) "}
+                            <a href="javascript:void(0);" data-href="{:url('/admin/adminuser/delAjax',['id'=>$vo.userId])}"  class="btn btn-danger btn-xs js-ajax-delete"  ><i class="fa fa-trash-o"></i> 删除 </a>
+                        		{/if}
+                        		<br>
+                           		{if condition="(checkPopedom('/admin/adminuser/changeAjax')) "}
+                            {if condition="($vo.approved===1) "}
+                            <a href="javascript:void(0);" class="btn btn-warning btn-xs btn-change-approved" id_val="{$vo.userId}" st_val="0"><i class="fa fa-pencil"></i> 禁用</a>
+                            {else}
+                            <a href="javascript:void(0);" class="btn btn-success btn-xs btn-change-approved" id_val="{$vo.userId}" st_val="1"><i class="fa fa-pencil"></i> 启用</a>
+                            {/if}
+                            	{/if}
+                            	{if condition="(checkPopedom('/admin/adminuser/changeLockAjax')) "}
+                            {if condition="($vo.is_lock===1) "}
+                            <a href="javascript:void(0);" class="btn btn-success btn-xs btn-change-lock" id_val="{$vo.userId}" st_val="0" ><i class="fa fa-unlock-alt"></i> 解锁 </a>
+                        	{/if}
+                        		{/if}
+									</td>
+								</tr>
+								{assign name="sindex" value="sindex++" /}
+                            {/volist}
+                        </tbody>
+                        </table>
+                    </div>
+                    {$page->render()}
+                </div>
+           
+
+{include file='public/rightEnd,public/footer' /}
+
+<script type="text/javascript">
+$(function(){
+	$(".btn-change-approved").bind('click',function(){
+		if($(this).attr("sending")==1){
+			return;
+		}
+		var id_val = parseInt($(this).attr('id_val'));
+		var st_val = parseInt($(this).attr('st_val'));
+		if(id_val>0){
+			$(this).attr("sending",1);
+			
+			layer.confirm('确认要更改吗？', {
+				icon: 3, 
+				btn: ['确认','取消'], //按钮
+				title:'提示',
+			}, function(index){
+  				layer.close(index);
+  				$.getJSON("{:url('/admin/adminuser/changeAjax')}",{id:id_val,st:st_val},
+  				function(data){
+  					if(null != data.msg || '' != data.msg){
+  						layer.msg(data.msg);
+  					}
+  					
+  					if(data.code==200){
+  						location.reload();
+  					}else if(null != data.url || '' != data.url){
+						window.location.href = data.url;
+					}
+  					$(this).removeAttr("sending");
+  				});
+			});
+		}
+	});
+	
+	$(".btn-change-lock").bind('click',function(){
+		if($(this).attr("sending")==1){
+			return;
+		}
+		var id_val = parseInt($(this).attr('id_val'));
+		var st_val = parseInt($(this).attr('st_val'));
+		if(id_val>0){
+			$(this).attr("sending",1);
+			
+			layer.confirm('确认要更改吗？', {
+				icon: 3, 
+				btn: ['确认','取消'], //按钮
+				title:'提示',
+			}, function(index){
+  				layer.close(index);
+  				$.getJSON("{:url('/admin/adminuser/changeLockAjax')}",{id:id_val,st:st_val},
+  				function(data){
+  					if(null != data.msg || '' != data.msg){
+  						layer.msg(data.msg);
+  					}
+  					
+  					if(data.code==200){
+  						location.reload();
+  					}else if(null != data.url || '' != data.url){
+						window.location.href = data.url;
+					}
+  					$(this).removeAttr("sending");
+  				});
+			});
+		}
+	});
+});
+</script>

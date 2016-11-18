@@ -1,0 +1,152 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+
+                <div class="x_content">
+                    <div class="table-responsive">
+                     <form class="form-horizontal">
+                        <div class="col-md-2 col-sm-12 col-xs-12 form-group">
+
+                    	</div>
+                    	
+                    	<div class="col-md-3 col-sm-12 col-xs-12 form-group pull-right ">
+                              <div class="input-group">
+                                <input type="text"  id="nameSearch" class="form-control" placeholder="参数代码" value="{$code}">
+                                <span class="input-group-btn">
+
+                                 <button type="button" class="btn btn-primary" id="nameSearchButton"><i class="fa fa-search"></i></button>
+                                </span>
+                              </div>
+                        </div>
+
+                    	<div class="col-md-2 col-sm-12 col-xs-12 form-group pull-right ">
+			                  <div class="input-group">
+			                 	 <button type="button" class="btn btn-default" id='updateCache'>刷新缓存</button>
+			                  </div>
+                		</div>
+                		<div class="col-md-2 col-sm-12 col-xs-12 form-group pull-right">
+
+           				 </div>
+
+                   </form>
+                        <table class="table table-striped jambo_table bulk_action">
+                        <thead>
+							<tr class="headings">
+								<!-- <th>
+									<input type="checkbox" id="check-all" class="flat">
+								</th> -->
+								<th class="column-title">参数代码</th>
+								<th class="column-title">参数用途 </th>
+								<th class="column-title">参数值 </th>
+								<th class="column-title">更新时间 </th>
+								<th class="column-title no-link last"><span class="nobr">操作</span>
+								</th>
+								<th class="bulk-actions" colspan="7">
+							    	<a class="antoo" style="color:#fff; font-weight:500;">批量操作 ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+								</th>
+							</tr>
+                        </thead>
+
+                        <tbody>
+                            {volist name="$page->items()" id="vo"}
+								<tr class="even pointer">
+								<!-- 	<td class="a-center ">
+									    <input type="checkbox" class="flat" name="table_records">
+									</td> -->
+									<td class=" ">{$vo.code|cutstrnohtml=16}</td>
+									<td class=" ">{$vo.note|cutstrnohtml=16}</td>
+									<td class=" ">{$vo.value|cutstrnohtml=16}</td>
+									<td class=" ">{$vo.Createtime}</td>
+									<td class=" last">
+								{if condition="(checkPopedom('/admin/configure/edit')) "}
+                            <a href="{:url('admin/configure/edit',['id'=>$vo.id])}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> 编辑</a>
+                            {/if}
+									</td>
+								</tr>
+                            {/volist}
+                        </tbody>
+                        </table>
+                    </div>
+                    {$page->render()}
+                </div>
+
+
+{include file='public/rightEnd,public/footer' /}
+
+<script type="text/javascript">
+
+
+$(document).ready(function(){
+    $('select[x-listen]').change(onListPageSelectionChange) ;
+    
+
+    $('#nameSearchButton').click(function(){
+        var name = $('#nameSearch').val() ,
+            url = new xxx.Url().removeParam('page') ;
+
+        url.setParam('code',encodeURIComponent(name)).go() ;
+    }) ;
+    
+    $('#updateCache').click(function(){
+        $.getJSON("{:url('admin/configure/updateCache')}")
+            .success(function(result){
+            	var txt = "更新失败，请重试。" ;
+            	if (200 === result.code) {
+            		txt = "更新成功" ;
+            	}
+            	layer.msg(txt) ;
+            }) ;
+    }) ;
+    
+}) ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+$(function(){
+	var _isld=0;
+
+	 $('a.js-ajax-delete').click(function(){
+
+		if(_isld==1){layer.msg('提交中...请稍等片刻！');return false;}
+		var href=$(this).attr('data-href');
+		layer.confirm('确认要删除吗？', {
+			icon: 3,
+			btn: ['确认','取消'], //按钮
+			title:'提示',
+			}, function(index){
+  			  layer.close(index);
+  			 _isld=1;
+
+  			$.getJSON(href, function(v){
+  				layer.msg(v.msg) ;
+				_isld=0;
+				if(v.code==200){
+					setTimeout(function(){window.location.reload()},1000);
+
+				}
+  			});
+
+		});
+
+
+
+		});
+
+
+
+
+});*/
+
+</script>

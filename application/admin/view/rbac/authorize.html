@@ -1,0 +1,133 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+<style>
+
+
+
+.expanded{margin-left: -20px;}
+
+</style>
+
+
+
+
+                <div class="x_content">
+                    <div class="x_content">
+                    <br>
+                    <form id="role-info-submit"  class="form-horizontal form-label-left" >
+
+                    <div class="table_full">
+					<table width="100%" cellspacing="0" id="dnd-example">
+							<tbody>
+								{$categorys}
+							</tbody>
+					</table>
+					</div>
+
+
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                          <input type="hidden" name="roleid" value="{$roleid}" />
+                          <button type="submit" class="btn btn-primary">提交</button>
+                          <a href="javascript:history.back(-1)" class="btn btn-success">返回</a>
+                        </div>
+                      </div>
+
+                    </form>
+                  </div>
+                </div>
+
+
+
+{include file='public/rightEnd,public/footer' /}
+<script type="text/javascript">
+
+
+var _isadd=0;
+$("#role-info-submit").on("submit", function(){
+	if(_isadd==1){layer.msg('提交中...请稍等片刻！');return false;}
+	_isadd=1;
+    $.ajax({
+        url:"{:url('/admin/rbac/authorize_post')}",
+        data:$(this).serializeArray(),
+        type:"POST",
+        dataType:"json",
+        success: function(v){
+        	_isadd=0;
+        	layer.msg(v.msg) ;
+			_isld=0;
+			if(v.code==200){
+				setTimeout(function(){window.location.href="{:url('/admin/rbac/listPage')}";},1000);
+			}
+
+        }
+    });
+    return false;
+});
+
+$(document).ready(function () {
+	Wind.css('treeTable');
+    Wind.use('treeTable', function () {
+        $("#dnd-example").treeTable({
+            indent: 20
+        });
+    });
+});
+
+function checknode(obj) {
+    var chk = $("input[type='checkbox']");
+    var count = chk.length;
+    var num = chk.index(obj);
+    var level_top = level_bottom = chk.eq(num).attr('level');
+    //console.log(num);
+    //console.log(level_top);
+    for (var i = num; i >= 0; i--) {
+        var le = chk.eq(i).attr('level');
+        
+        if (eval(le) < eval(level_top)) {
+            chk.eq(i).prop("checked", true);
+            var level_top = level_top - 1;
+        }
+    }
+    for (var j = num + 1; j < count; j++) {
+        var le = chk.eq(j).attr('level');
+       // console.log(chk.eq(num).is(':checked'));
+        
+        if (chk.eq(num).is(':checked') == true) {
+        //console.log(le);
+            if (eval(le) > eval(level_bottom)){
+            	chk.eq(j).prop("checked", true);
+            }
+            else if (eval(le) == eval(level_bottom)){
+            	break;
+            }
+        } else {
+            if (eval(le) > eval(level_bottom)){
+            	chk.eq(j).prop("checked", false);
+            }else if(eval(le) == eval(level_bottom)){
+            	break;
+            }
+        }
+    }
+}
+
+/* 
+$("#dnd-example").on("change", "input[type='checkbox']", function(){
+
+	var $this = $(this).closest("tr"),
+    isChecked = $(this).prop("checked"),
+	   level = $(this).attr("level"),
+
+    //   筛选子集
+  $child = $this.siblings().filter(function(){
+
+		return $(this).find("input[type='checkbox']").attr("level") - level == 1 && $(this).attr("class").split(" ")[0].indexOf($this.attr("id")) !== -1;
+
+	});
+  // 给子集选中效果
+  $child.find("input[type='checkbox']").prop("checked",isChecked);
+
+}) */
+
+</script>

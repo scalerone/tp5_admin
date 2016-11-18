@@ -1,0 +1,56 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+    <div class="x_content">
+        <div class="table-responsive">
+        <form class="form-horizontal">
+            <div class="col-md-2 col-sm-12 col-xs-12 form-group">
+                {if condition="(checkPopedom('/admin/content/add')) "}
+                <a href="{:url('/admin/content/add')}" class="btn btn-sm btn-success" type="button"><i class="fa fa-plus-square"></i> 新增</a>
+                {/if}
+            </div>
+        </form>
+        <table class="table table-striped jambo_table bulk_action">
+            <thead>
+            <tr class="headings">
+                <th class="column-title">id</th>
+                <th class="column-title">标题</th>
+                <th class="column-title">代码</th>
+                <th class="column-title" >说明</th>
+                <th class="column-title" >内容</th>
+                <th class="column-title" >创建时间</th>
+                <th class="column-title no-link last "><span class="nobr">操作</span></th>
+            </tr>
+            </thead>
+            <tbody id="list_content">
+            {volist name="$list->items()" id="vo"}
+            <tr class="even pointer">
+                <th scope="row">{$vo.id}</th>
+                <td>{$vo.title}</td>
+                <td>{$vo.code}</td>
+                <td><div class="intr_show">{$vo.desc}</div></td>
+                <td><div class="intr_show">{$vo.content|cutstrnohtml=40}</div></td>
+                <td>{$vo.create_date}</td>
+                <td>
+                    {if condition="(checkPopedom('/admin/content/edit')) "}
+                    <a href="{:url('/admin/content/edit',['id'=>$vo.id])}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> 查看编辑</a>
+                    {/if}
+                    {if condition="(checkPopedom('/admin/content/del')) "}
+                    <a href="javascript:void(0);" data-href="{:url('/admin/content/del',['id'=>$vo.id])}" class="btn btn-danger btn-xs js-ajax-delete"><i class="fa fa-trash-o"></i> 删除</a>
+                    {/if}
+                </td>
+            </tr>
+            {/volist}
+            </tbody>
+        </table>
+        </div>
+        {$list->render()}
+    </div>
+{include file='public/rightEnd,public/footer' /}
+<script type="text/javascript">
+    $(document).ready(function(){
+    	 $('select[x-listen]').change(onListPageSelectionChange) ;
+       /*  var url = new xxx.Url() , $templeSel=$('#templeSel') ;
+        $templeSel.change(function(){
+            url.setParam('tid',$(this).val()).removeParam('pid').removeParam('page').go() ;
+        }) ; */
+    }) ;
+</script>

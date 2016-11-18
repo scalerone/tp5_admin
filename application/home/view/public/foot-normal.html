@@ -1,0 +1,21 @@
+<div class="footer eee">
+	<ul class="ib-li">
+		{volist name="articles" id="vo"}
+		{if condition="($vo.I_position==1)"}
+		<dl>
+			{if condition="(isset($vo.contents))"}
+			{volist name='$vo.contents' id='v'}
+			{if condition="($key!=0)"}|{/if}<li><a href="/help/getById?class={$vo.id}&type=1&id={$v.id}" target="_blank">{$v.Vc_name}</a></li>
+			{/volist}
+			{/if}
+		</dl>
+		{/if}
+		{/volist}
+	</ul>
+	<div class="cprt">©版权所有&nbsp;2016云采网&nbsp;<a href="http://www.miitbeian.gov.cn/" target="_blank">蜀ICP备：15028231号-3</a></div>
+</div>
+<script src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="{:getResource('home/js/jquery.datetimepicker.js')}"></script>
+<script src="//cdn.bootcss.com/layer/2.4/layer.min.js"></script>
+<script type="text/javascript" src="/static/admin/js/xxx/core.js"></script>
+<script src="{:getResource('home/js/common.js')}"></script>

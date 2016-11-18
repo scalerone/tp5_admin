@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>云采网 - 登录</title>
+		<link href="//cdn.bootcss.com/layer/2.4/skin/layer.min.css" rel="stylesheet">
+		{include file='public/head' /}
+	</head>
+	<body>
+		<!-- top -->
+		<div class="user-top">
+			<div class="w1200 cc">
+				<a href="/" class="logo fl"><img src="/static/home/img/logo.png?x=11"></a>
+			</div>
+		</div>
+		<!-- top -->
+		<div class="user-box">
+			<div class="w1200 cc cb">
+				<div class="fr user-box-form">
+					<h2>欢迎来到云采网，请登录</h2>
+					<form method="post" class="form l-form" action="{:url('doLogin')}">
+						<div class="form-item">
+							<span><i class="name"></i></span><input type="text" name="username" id="username" autocomplete="off" placeholder="请输入用户名" data-rule="用户名: required;password;" maxLength="16" tabindex="1"/>
+						</div>
+						<div class="form-item">
+							<span><i class="pass"></i></span><input type="password" name="password" id="password" autocomplete="off" placeholder="请输入密码" maxLength="16" tabindex="2"/>
+						</div>
+						<button type="submit" class="form-btn">登录</button>
+						<div class="form-menu cb">
+							<a href="{:url('register')}" class="fl">免费注册</a>
+							<a href="{:url('forgetpwd')}" class="fr">忘记登录密码?</a>
+						</div>
+						<div class="form-tips">
+							<!-- <p>使用合作账号：</p> -->
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- footer -->
+		{include file='public/foot' /}
+		<script src="//cdn.bootcss.com/layer/2.4/layer.min.js"></script>
+		<script type="text/javascript">
+			;(function(){
+				
+				// 登录用的
+				var $form = $(".l-form"),
+					$button = $("button[type='submit']", $form);
+					
+				$form.find("input").on("blur", function(){
+					// 清空首尾空格
+					$(this).val($(this).val().trim());
+				});
+				
+				$form.on('submit', function(ev){
+					
+					var $this = $(this);
+					
+					$this.find("button[type='submit']").attr('disabled',true).html("登录中");
+					$.post("{:url('doLogin')}", $('.l-form').serialize(), function(res) {
+						if(res.code === 200 && res.url == "") {
+							location.replace("/workroom/index");
+							// location.href = '/workroom/index';
+						} else if(res.code === 200 && res.url !== ""){
+							// location.href = res.url;
+							location.replace(res.url);
+						} else {
+							layer.msg(res.msg, {time:1500});
+							$this.find("button[type='submit']").removeAttr('disabled').html("登录");
+						}
+					});
+
+					ev.preventDefault();
+				});
+					
+			})();
+		</script>
+	</body>
+</html>

@@ -1,0 +1,178 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+<div class="x_content">
+   <br>
+   <form id="adminuserform" class="form-horizontal form-label-left adminuserform" novalidate>
+
+	 
+     
+     <div class="item form-group">
+       <label class="control-label col-md-3 col-sm-3 col-xs-12">用户名 <span class="required">*</span></label>
+       <div class="col-md-6 col-sm-6 col-xs-12">
+         <input type="text" name="userName" value="{$user|output='userName'}" maxlength="100" required="required" class="form-control col-md-7 col-xs-12">
+       </div>
+     </div>
+     
+     <div class="item form-group">
+       <label class="control-label col-md-3 col-sm-3 col-xs-12">登陆密码 {$user|output='userId'?'<span class="">&nbsp;</span>':'<span class="required">*</span>'}</label>
+       <div class="col-md-6 col-sm-6 col-xs-12">
+         <input type="text" name="password" value="{$user|output='password'}" maxlength="100" {$user|output='userId'?'':'required="required"'} class="form-control col-md-7 col-xs-12">
+       </div>
+     </div>
+     
+     <div class="item form-group">
+       <label class="control-label col-md-3 col-sm-3 col-xs-12">真实名称 <span class="required">*</span>
+       </label>
+       <div class="col-md-6 col-sm-6 col-xs-12">
+         <input name="realName" value="{$user|output='realName'}" maxlength="100" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
+       </div>
+     </div>
+     
+     <div class="item form-group">
+       <label class="control-label col-md-3 col-sm-3 col-xs-12">电子邮件 <span class="required">*</span>
+       </label>
+       <div class="col-md-6 col-sm-6 col-xs-12">
+         <input name="email" value="{$user|output='email'}" maxlength="100" class="date-picker form-control col-md-7 col-xs-12" required="required" type="email">
+       </div>
+     </div>
+     
+     <div class="item form-group">
+       <label class="control-label col-md-3 col-sm-3 col-xs-12">手机号码 <span class="required">*</span>
+       </label>
+       <div class="col-md-6 col-sm-6 col-xs-12">
+         <input name="mobile" value="{$user|output='mobile'}" maxlength="11" class="date-picker form-control col-md-7 col-xs-12" required="required" type="mobile">
+       </div>
+     </div>
+
+    
+           
+    
+     <div class="item form-group">
+         <label class="control-label col-md-3 col-sm-3 col-xs-12">管理角色 <span class="">&nbsp;</span></label>
+         <div class="col-md-6 col-sm-6 col-xs-12">
+             {volist name="roles" id="vo"}
+             <div class="checkbox temple-checkbox">
+               <label>
+                 <input type="checkbox" name="role" class="flat" value="{$vo.roleId}" {if condition="(strpos_($user.roleIds,','.$vo.roleId.',')>0)"}checked="checked"{/if}> {$vo.roleName}
+               </label>
+             </div>
+             {/volist}
+         </div>
+     </div>
+     
+     <div class="item form-group">
+         <label class="control-label col-md-3 col-sm-3 col-xs-12">是否可用 <span class="required">*</span></label>
+         <div class="col-md-6 col-sm-6 col-xs-12">
+             <div class="radio">
+               <label>
+                 <input value="1" name="approved" type="radio" class="flat" {if condition="(isetn($user.approved)==1)"}checked{/if}> 可用
+               </label>
+             </div>
+             <div class="radio">
+               <label>
+                 <input value="0" name="approved" type="radio" class="flat" {if condition="(isetn($user.approved)==0)"}checked{/if}> 不可用
+               </label>
+             </div>
+         </div>
+     </div>
+     
+     <div class="item form-group">
+       <label class="control-label col-md-3 col-sm-3 col-xs-12">用户描述 <span class="">&nbsp;</span></label>
+       <div class="col-md-6 col-sm-6 col-xs-12">
+         <textarea name="comment" class="form-control col-md-7 col-xs-12">{$user|output='comment'}</textarea>
+       </div>
+     </div>
+     
+     
+     <div class="ln_solid"></div>
+     <div class="form-group">
+       <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+       	 <input type="hidden" name="id" value="{$user|output='userId'}">
+       	 <input type="hidden" name="roleIds" value="">
+       	 <input type="hidden" name="templeIds" value="">
+         <button type="submit" class="btn btn-success">确认</button>
+           <a href="javascript:history.back(-1)" class="btn btn-danger">取消</a>
+       </div>
+     </div>
+
+   </form>
+</div>
+
+
+{include file='public/rightEnd,public/footer' /}
+
+<script type="text/javascript">
+$(function(){
+	var $form = $('form');
+	$form.on('blur', 'input[required][pattern]', validator.checkField);
+
+    var id=$('input[name="id"]').val();
+    $('input[name="userName"]').on('blur',function () {
+        var value=$(this).val();
+        $.ajax({
+            url:"{:url('/admin/adminuser/checkOne')}",
+            data:{"userName":value,'id':id},
+            type:"POST",
+            dataType:"json",
+            success: function(v){
+                console.log(v);
+                layer.msg(v.msg) ;
+            }
+        });
+    })
+    $('input[name="email"]').on('blur',function () {
+        var value=$(this).val();
+        $.ajax({
+            url:"{:url('/admin/adminuser/checkOne')}",
+            data:{"email":value,'id':id},
+            type:"POST",
+            dataType:"json",
+            success: function(v){
+                console.log(v);
+                layer.msg(v.msg) ;
+            }
+        });
+    })
+    $('input[name="mobile"]').on('blur',function () {
+        var value=$(this).val();
+        $.ajax({
+            url:"{:url('/admin/adminuser/checkOne')}",
+            data:{"mobile":value,'id':id},
+            type:"POST",
+            dataType:"json",
+            success: function(v){
+                console.log(v);
+                layer.msg(v.msg) ;
+            }
+        });
+    })
+    
+
+	var isSubmited = false;
+	$("form").submit(function(e){
+        e.preventDefault();
+        if(!validator.checkAll($(this)) || isSubmited) {
+    		return false;
+    	}
+        
+       	//选择角色
+       	var roleIds = '';
+       	$("input[name='role']:checked").each(function(){
+       		roleIds += ","+$(this).val();
+       	})
+       	$("input[name='roleIds']").val(roleIds.substr(1));
+       	
+      
+       	isSubmited = true ;
+        $.post("{:url('/admin/adminuser/submitAjax')}",$('form').serialize()).then(onSubmited) ;
+    });
+	function onSubmited(d) {
+        layer.msg(d.msg) ;
+        if (d.code==200) {
+        	//window.location.href = "/adminuser/showlist";
+            new xxx.Url("{:url('/admin/adminuser/showlist')}").delayGo(2) ;
+        }
+        isSubmited = false ;
+    }
+})
+</script>

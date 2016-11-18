@@ -1,0 +1,26 @@
+<!-- 登录弹窗 -->
+<div class="dilog hide" id="dilog">
+    <div class="mask-bg pa"></div>
+    <div class="pa dilog-wrap">
+        <div class="user-box-form pa">
+            <a href="javascript:$('#dilog').fadeOut(150);" class="close pa"><img src="/static/home/img/close.png"></a>
+            <h2>欢迎来到云采网，请登录</h2>
+            <form method="post" class="form login-form" action="{:url('user/doLogin')}">
+                <div class="form-item">
+                    <span><i class="name"></i></span><input type="text" name="username" id="username" autocomplete="off" placeholder="请输入用户名" />
+                </div>
+                <div class="form-item">
+                    <span><i class="pass"></i></span><input type="password" name="password" id="password" autocomplete="off" placeholder="请输入密码"/>
+                </div>
+                <button type="submit" class="form-btn">登录</button>
+                <div class="form-menu cb">
+                    <a href="{:url('user/register')}" class="fl">免费注册</a>
+                    <a href="{:url('user/forgetpwd')}" class="fr">忘记登录密码?</a>
+                </div>
+                <div class="form-tips">
+                    <!-- <p>使用合作账号：</p> -->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

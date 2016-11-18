@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>云采网 - 注册</title>
+		{include file='public/head' /}
+	</head>
+	<body>
+		<!-- top -->
+		<div class="reg-top">
+			<div class="w1200 cc">
+				<a href="/" class="logo fl"><img src="/static/home/img/logo.png?x=1112"></a>
+				<div class="fl fl-li tab" id="reg-tab">
+					<li class="active"><a href="javascript:;">填写资料</a></li>
+					<li class="success"><a href="javascript:;"><i></i>注册成功</a></li>
+				</div>
+			</div>
+		</div>
+		<!-- top -->
+		<div class="reg-form w1200 cc">
+			<div class="success-page w1200 cc ib-a tac hide" id="success">
+				<p>恭喜您，注册成功！</p>
+				<a href="/">返回首页</a><a href="/workroom/index" class="active">我的工作台</a>
+			</div>
+			<form autocomplete="off" method="post" action="{:url('doRegister')}" data-success="注册成功" data-error="注册失败" id="reg">
+				<div class="form-item">
+					<label for=""><em class="warring">*</em>手机号</label>
+					<input type="text" data-rule="required:手机号;mobile;remote[{:url('user/doMobile')}]" name="mobile" placeholder="手机号码" tabindex="1" maxlength="11"/>
+					<span class="msg-box error" for="mobile"></span>
+				</div>
+				<div class="form-item">
+					<label for=""><em class="warring">*</em>验证码</label>
+					<input type="text" class="small" name="code" maxlength="4" tabindex="2" id="code" data-rule="验证码：required;"/>
+					<input type="hidden" name="codeid" id="codeid">
+					<img id="verify_img" src="{:captcha_src()}" alt="验证码" onclick="refreshVerify()">
+                	<a href="javascript:refreshVerify()" class="menu">点击刷新</a>
+					<span class="msg-box error" for="code"></span>
+				</div>
+				<div class="form-item">
+					<label for=""><em class="warring">*</em>短信验证码</label>
+					<input type="text" class="small" data-rules="required" name="sms_code" tabindex="3" maxlength="6"/>
+					<button type="button" class="menu" id="getCode">获取验证码</button>
+				</div>
+				<div class="form-item">
+					<label for=""><em class="warring">*</em>设置密码</label>
+					<input type="password" placeholder="6~18位密码" maxLength="18" data-rule="密码: required;password;!digits;length[6~];" name="password" data-msg-digits="{0}不能使用纯数字" data-msg-length="{0}至少6位" tabindex="4" id="password"/>
+					 <span></span>
+				</div>
+				<div class="form-item">
+					<label for=""><em class="warring">*</em>确认密码</label>
+					<input type="password" placeholder="6~18位密码" data-rule="确认密码: required;match(password);" tabindex="5" name="repassrod" maxlength="18"/>
+					<span></span>
+				</div>
+				<div class="form-item">
+					<label for="">姓名</label>
+					<input type="text" placeholder="请输入您的姓名" name="name" tabindex="6" maxlength="15"/>
+					<span></span>
+				</div>
+				<div class="form-licens">
+					<label for="licens" class="checker" data-type="checkbox"><i></i>阅读并同意</label><input type="checkbox" name="accept" id="licens" value="1"><a href="/help/getById?class=41&type=1&id=60" target="_blank">《用户服务协议》</a>
+				</div>
+				<button type="submit" class="form-btn">注册</button>
+			</form>
+		</div>
+		<!-- footer -->
+
+		{include file='public/foot' /}
+		<script src="//cdn.bootcss.com/nice-validator/1.0.7/jquery.validator.min.js"></script>
+		<script src="//cdn.bootcss.com/nice-validator/1.0.7/local/zh-CN.min.js"></script>
+		<!-- footer -->
+		<script>
+			$("#reg").validator({
+				stopOnError: false, //关闭此开关，以便一次性显示所有消息
+   				//msgMaker: false  //不要自动生成消息
+			});
+
+			$("#reg").bind('valid.form', function(){
+			    $.ajax({
+			        url: '{:url('doRegister')}',
+			        type: 'POST',
+			        data: $(this).serialize(),
+			        success: function(res){
+						if(res.code == 200) {
+							layer.msg("注册成功");
+							
+							if(res.url) {
+								location.href=res.url;
+							} else {
+								$("#success").show();
+								$("#reg").remove();
+								$("#reg-tab li")
+									.eq(1).addClass('active')
+									.siblings('li').removeClass('active');
+							}
+							
+						} else {
+							layer.msg(res.msg,{time:1500})
+						}
+			        }
+			    });
+			});
+
+
+
+
+
+
+
+
+
+
+
+
+		    function refreshVerify() {
+		        var ts = Date.parse(new Date())/1000;
+		        var img = document.getElementById('verify_img');
+		        var id = document.getElementById('codeid');
+		        img.src = "/user/captcha?id="+ts;
+		        id.value=ts;
+		    }
+
+			refreshVerify();
+
+			$("#getCode").on("click", function(){
+				var $this = $(this);
+
+				if($("input[name='code']").val() == "") {
+					layer.msg("验证码不能为空",{time:1500});
+					return false;
+				}
+
+				$.post('{:url('user/doMobile')}',{mobile:$("input[name='mobile']").val()}).then(function(res){
+					if(res.code == 200) {
+						$.post('{:url('doCaptcha')}', {codeid: document.getElementById('codeid').value,code:document.getElementById('code').value}).then(function(res){
+							if(res.code == 500) {
+								layer.msg("验证码输入不正确,请检查",{time:1500});
+							} else {
+								if(res.code == 200) {
+									$.post("{:url('user/sendsms')}",{mobile:$("input[name='mobile']").val()}).then(function(res){
+										if(res.code == 200) {
+											layer.msg("验证码已发送，请注意查收手机短信",{time:1500});
+											$this.trigger('countDown');
+										} else {
+											layer.msg(res.msg,{time:1500});
+										}
+									}).fail(function(){
+										layer.msg("服务器罢工了，请联系管理员",{time:1500});
+									});
+
+								} else {
+									layer.msg(res.msg,{time:1500});
+								}
+							}
+						});
+					} else {
+						layer.msg("该手机号已注册，请勿重新注册")
+					}
+				});
+
+			})
+
+			$("#getCode").on("countDown", function(){
+				var $this = $(this),
+					time = 60;
+
+				$this.attr("disabled","true");
+
+				var timer = setInterval(function(){
+					$this.html((--time)+"s后可重新发送");
+					if(time == 0) {
+						clearInterval(timer);
+						$this.removeAttr("disabled").html("获取验证码");
+					}
+				},1000);
+
+			});
+	 </script>
+
+
+	</body>
+</html>

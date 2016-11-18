@@ -1,0 +1,113 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+    <div class="x_content">
+        <div class="table-responsive">
+        <form   class="form-horizontal form-label-left adminuserform" enctype="multipart/form-data" method="post" novalidate="">
+            <div class="item form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" >标题 <span class="required">*</span></label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="text" name="title" value="{$info.title}"  maxlength="50" datatype="s1-50" errormsg="请输入1到50个字符" required="required" class="form-control col-md-7 col-xs-12">
+               		<div class="Validform_checktip"></div>
+                </div>
+            </div>
+            <div class="form-group item">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">代码 <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                 <input type="text"  name="code" value="{$info.code}" maxlength="60" datatype="s1-60" errormsg="请输入1到60个字符" required="required" class="form-control col-md-7 col-xs-12">
+               		<div class="Validform_checktip"></div> 
+                </div>
+            </div>
+            <div class="form-group item">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" >说明 <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                 <textarea rows="5" required="required"  class="form-control" name="desc" datatype="*2-255" errormsg="请输入2到255字符">{$info.desc}</textarea>
+                         <div class="Validform_checktip"></div> 
+                                     
+                </div>
+            </div>
+            <div class="form-group item">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">内容 <span class="required">*</span>
+                </label>
+                <div class="col-md-8 col-sm-8 col-xs-12">
+                    <script type="text/plain" id="contents"  name="content" >{$info.content}</script>
+                </div>
+            </div>
+            <div class="form-group ">
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+            <div class="ln_solid"></div>
+            <input type="hidden" name="id" value="{$info['id']}">
+                    <button type="submit" class="btn btn-success">确认</button>
+                    <button type="button" onclick="history.go(-1)" class="btn btn-danger">取消</button>
+                </div>
+            </div>
+
+        </form>
+        </div>
+    </div>
+<!-- Select2 -->
+{include file='public/rightEnd,public/footer' /}
+<script>
+    $(document).ready(function() {
+    	
+		//表单验证
+        
+        var rsformcheck = $("form").Validform({
+			tiptype:3,
+			showAllError:true,
+		});
+    	
+    	
+    	
+    	//编辑器控件
+    	editorcontent = new baidu.editor.ui.Editor();
+    	editorcontent.render('contents');
+    	try {
+    		editorcontent.sync();
+    	} catch (err) {
+    	}
+    	//业务
+        var _isadd=0,$form = $('form');
+        $form.on('blur', 'input[required]', validator.checkField);
+        $('form').submit(function(e){
+            if(!validator.checkAll($(this))) {
+                return false;
+            }
+            if(!rsformcheck.check()){
+        		return false;
+        	}
+            if(editorcontent.hasContents()){  //提交条件满足时提交内容
+             	try {
+     				editorcontent.sync();
+     			} catch (err) {
+     			
+     			}           //此处的editorcontent是页面实例化出来的编辑器对象  
+                       
+            }else{  
+               layer.alert("活动详询内容 不能为空！ "); 
+               return false;
+            }  
+            if(_isadd==1){layer.msg('提交中...请稍等片刻！');return false;}
+            _isadd=1;
+            $.ajax({
+                url:"{:url('admin/content/edit')}",
+                data:$(this).serializeArray(),
+                type:"POST",
+                dataType:"json",
+                success: function(v){
+                    _isadd=0;
+                    layer.msg(v.msg) ;
+                    _isld=0;
+                    if(v.code==200){
+                        var va=$("input[type='hidden']").val();
+                        setTimeout(function(){window.location.href="{:url('/content/index')}"+'?tid='+va;},1000);
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
+<!-- /Select2 -->
+
+

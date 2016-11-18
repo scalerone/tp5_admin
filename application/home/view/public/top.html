@@ -1,0 +1,51 @@
+{include file="public/var"}
+<!-- top -->
+<div class="top">
+	<div class="w1200 cc cb">
+		<div class="fl top-left">
+			<a href="/"><i></i></a>{if condition="isset($_SESSION['user'])"}欢迎你,<a href="/account/index">{$_SESSION['user']['Vc_name']==null?$_SESSION['user']['Vc_mobile']:$_SESSION['user']['Vc_name']}!</a>&nbsp;<a href="/user/loginout" class="exit">[退出]</a>{else}欢迎来到云采网，请<a href="{:url('user/login')}" class="t-login">登录</a><a href="{:url('user/register')}">免费注册</a>{/if}
+		</div>
+		<div class="fr top-right">
+			<ul>
+				<li class="menu toggle toggle-1">
+					<a href="/workroom/index" class="noTarget">我的工作台<i class="up"></i></a>
+					<div class="top-right-slideNav db-a">
+						<a href="/project/listPage" class="noTarget isCertify">我的项目</a>
+						<a href="/order/listPage" class="noTarget isCertify">交易记录</a>
+						<a href="/bill/listPage" class="noTarget isCertify">我的账单</a>
+					</div>
+				</li>
+				<li class="menu"><a href="/message/myMessages" class="noTarget"><i class="message{if condition="isset($_SESSION['user']) && isset($_SESSION['user']['unread']) && $_SESSION['user']['unread']==1"} new{/if}"></i>消息</a></li>
+				<li class="menu"><a href="/help/index">帮助中心</a></li>
+				<li class="menu toggle">
+					<a>网站导航</a>
+					<div class="top-right-slideNav db-a">
+						<a href="http://www.scnyw.com/" target="_blank">四川能投</a>
+						<a href="http://ecp.scnyw.com" target="_blank">物产集采平台</a>
+						<a href="http://www.scxnyf.com/" target="_blank">鑫能裕丰</a>
+						<a href="http://www.bestzzw.com" target="_blank">租租网</a>
+					</div>
+				</li>
+				<li class="menu menu-tel">服务热线：<span class="tel">{:cache('HotTel')}</span></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<!-- top -->
+<div class="header h100 bg000">
+	<div class="w1200 cc cb">
+		<a href="/workroom/index" class="logo fl"><img src="/static/home/img/logo2.png?x=222" width="128" height="59"></a>
+		<div class="fl fl-li header-nav" {if condition="!isset($_SESSION['user'])"} style='display:none;'{/if}>
+			<ul id="header-nav">
+				<li><a href="/workroom/index">我的工作台</a></li>
+				<li><a href="/account/index">账户设置</a></li>
+				<li><a href="/message/myMessages">消息</a></li>
+			</ul>
+		</div>
+		<div class="fr header-menu">
+			<a href="/">返回云采网首页>></a>
+		</div>
+	</div>
+</div>
+{include file="public/loginMask"}
+

@@ -1,0 +1,14 @@
+{include file="public/mask"}
+<script type="text/javascript">
+    window.isLogin = {if condition="isset($_SESSION['user'])"}true{else}false{/if};
+    
+    {if condition='isset($_SESSION["user"])'}
+        {if condition='isset($userCertifyStatus)'}
+            window.isCertify = {$userCertifyStatus==true?'true':'false'};
+        {else}
+            window.isCertify = false;
+         {/if}
+     {else}
+        window.isCertify = false;
+    {/if}
+</script>

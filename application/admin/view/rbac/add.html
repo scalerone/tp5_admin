@@ -1,0 +1,76 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+
+                <div class="x_content">
+                    <div class="x_content">
+                    <br>
+                    <form id="role-info-submit"  class="form-horizontal form-label-left" novalidate>
+
+                      <div class="form-group item">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="role-name">角色名称 <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="role-name" name="rolename" required="required" maxlength="64" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group item">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="role-desc">角色描述 <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="role-desc" name="roledesc" required="required" maxlength="64" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                     
+                     
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                          <button type="submit" class="btn btn-success">确认</button>
+                          <a href="javascript:history.back(-1)" class="btn btn-danger">取消</a>
+                        </div>
+                      </div>
+
+                    </form>
+                  </div>
+                </div>
+      
+
+
+{include file='public/rightEnd,public/footer' /}
+<script type="text/javascript">
+var _isadd=0,$form = $('form');
+$form.on('blur', 'input[required]', validator.checkField);
+$("#role-info-submit").on("submit", function(){
+	if(!validator.checkAll($(this))) {
+		return false;
+	}
+	
+	if(_isadd==1){layer.msg('提交中...请稍等片刻！');return false;}
+	_isadd=1;
+    $.ajax({
+        url:"{:url('/admin/rbac/add')}",
+        data:$(this).serializeArray(),
+        type:"POST",
+        dataType:"json",
+        success: function(v){
+        	_isadd=0;
+        	layer.msg(v.msg) ;
+			_isld=0;	
+			if(v.code==200){
+				setTimeout(function(){window.location.href="{:url('/admin/rbac/listPage')}";},1000);
+			}		
+            
+        }
+    });
+    return false;
+});
+
+
+
+
+</script>
+
+
+
+    
+   

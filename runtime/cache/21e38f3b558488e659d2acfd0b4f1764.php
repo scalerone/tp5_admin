@@ -1,0 +1,3 @@
+<?php
+//000000000000a:3:{s:11:"index/hello";a:2:{i:0;a:3:{i:0;s:9:"hello/:id";i:1;a:1:{s:2:"id";i:1;}i:2;a:0:{}}i:1;a:3:{i:0;s:11:"hello/:name";i:1;a:1:{s:4:"name";i:1;}i:2;a:0:{}}}s:17:"find_goods/toForm";a:1:{i:0;a:3:{i:0;s:21:"toForm-<year>-<month>";i:1;a:2:{s:4:"year";i:1;s:5:"month";i:1;}i:2;a:0:{}}}s:33:"\app\home\controller\User@captcha";a:1:{i:0;a:3:{i:0;s:13:"captcha/[:id]";i:1;a:1:{s:2:"id";i:2;}i:2;a:0:{}}}}
+?>

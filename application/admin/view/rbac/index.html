@@ -1,0 +1,112 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+
+                <div class="x_content">
+                    <div class="table-responsive">
+                    	 <div class="col-md-2 col-sm-12 col-xs-12 form-group">
+                    	 {if condition="(checkPopedom('/admin/rbac/add')) "}
+             		   	<a href="{:url('/admin/rbac/add')}" class="btn btn-sm btn-success" type="button"><i class="fa fa-plus-square"></i> 新增</a>    
+           			 	{/if}
+           			 	</div>
+                        <table class="table table-striped jambo_table bulk_action">
+                        <thead>
+							<tr class="headings">
+								<!-- <th>
+									<input type="checkbox" id="check-all" class="flat">
+								</th> -->
+								<th class="column-title">ID </th>
+								<th class="column-title">角色名称</th>
+								<th class="column-title">角色描述 </th>
+								<th class="column-title">更新时间 </th>
+								<th class="column-title no-link last"><span class="nobr">操作</span>
+								</th>
+								<th class="bulk-actions" colspan="7">
+							    	<a class="antoo" style="color:#fff; font-weight:500;">批量操作 ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+								</th>
+							</tr>
+                        </thead>
+
+                        <tbody>
+                            {volist name="list" id="vo"}
+								<tr class="even pointer">
+								<!-- 	<td class="a-center ">
+									    <input type="checkbox" class="flat" name="table_records">
+									</td> -->
+									<td class=" ">{$vo.roleId}</td>
+									<td class=" ">{$vo.roleName}</td>
+									<td class=" ">{$vo.roleDescription}</td>
+									<td class=" ">{$vo.Createtime}</td>
+									<td class=" last">
+								{if condition="$vo['roleId'] eq 1"}
+								
+                            <span ><i class="fa fa-folder"></i> 权限设置</span> &nbsp;&nbsp;
+                            <span><i class="fa fa-pencil"></i> 编辑</span> &nbsp;&nbsp;
+                            <span><i class="fa fa-trash-o"></i> 删除 </span> 
+								{else}
+								
+							{if condition="(checkPopedom('admin/rbac/authorize')) "}
+                            <a href="{:url('admin/rbac/authorize',['id'=>$vo.roleId])}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> 权限设置</a> 
+                            {/if}
+                            {if condition="(checkPopedom('admin/rbac/edit')) "}
+                            <a href="{:url('admin/rbac/edit',['id'=>$vo.roleId])}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> 编辑</a>
+                            {/if}
+                            {if condition="(checkPopedom('admin/rbac/del')) "}
+                            <a href="javascript:void(0);" data-href="{:url('admin/rbac/del',['id'=>$vo.roleId])}"  class="btn btn-danger btn-xs js-ajax-delete"  ><i class="fa fa-trash-o"></i> 删除 </a>
+                        	{/if}
+                        		{/if}
+									</td>
+								</tr>
+                            {/volist}
+                        </tbody>
+                        </table>
+                    </div>
+                  
+                </div>
+       
+
+
+{include file='public/rightEnd,public/footer' /}
+
+<script type="text/javascript">
+/*
+$(function(){
+	var _isld=0;
+	
+	 $('a.js-ajax-delete').click(function(){
+		
+		if(_isld==1){layer.msg('提交中...请稍等片刻！');return false;}
+		var href=$(this).attr('data-href');
+		layer.confirm('确认要删除吗？', {
+			icon: 3, 
+			btn: ['确认','取消'], //按钮
+			title:'提示',
+			}, function(index){
+  			  layer.close(index);
+  			 _isld=1;
+  			 
+  			$.getJSON(href, function(v){
+  				layer.msg(v.msg) ;
+				_isld=0;	
+				if(v.code==200){
+					setTimeout(function(){window.location.reload()},1000);
+					
+				}		
+  			});
+  
+		});
+		
+
+
+		});
+	 
+	
+	
+	
+});*/
+
+</script>
+
+
+
+
+

@@ -1,0 +1,12 @@
+<div id="notice" class="notice oh">
+    <div class="w1200 cc cb">
+        <span class="notice-title fl">
+            早报：
+        </span>
+        <ul class="fl cc">
+            {volist name="newsflow" id="vo"}
+                <li><a href="/help/news?type=1&id={$vo.id}">{$vo.Vc_name}</a></li>
+            {/volist}
+        </ul>
+    </div>
+</div>

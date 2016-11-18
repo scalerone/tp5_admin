@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {include file='public/head'}
+    <title>云采网首页</title>
+</head>
+<body>
+    {include file="public/top_small"}
+    <div class="banner" id="banner">
+        {include file="public/banner"}
+        {if condition="!isset($_SESSION['user'])"}
+            <div class="w1200 float-wrapper login-float">
+                <div class="fr user-box-form">
+                    <h2>欢迎来到云采网</h2>
+                    <form method="post" class="form index-form" action="{:url('user/doLogin')}">
+                        <div class="form-item">
+                            <span><i class="name"></i></span><input type="text" name="username" id="username" autocomplete="off" placeholder="请输入用户名" />
+                        </div>
+                        <div class="form-item">
+                            <span><i class="pass"></i></span><input type="password" name="password" id="password" autocomplete="off" placeholder="请输入密码"/>
+                        </div>
+                        <button type="submit" class="form-btn">登录</button>
+                        <div class="form-menu cb">
+                            <a href="{:url('user/register')}" class="fl">免费注册</a>
+                            <a href="{:url('user/forgetpwd')}" class="fr">忘记登录密码?</a>
+                        </div>
+                        <div class="form-tips">
+                            <!-- <p>使用合作账号：</p> -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {/if}
+    </div>
+    {include file="public/notice"}
+    <!-- index-mod8 -->
+    <div class="mod8 w1200 cc oh">
+        <ul class="w120 fl-li cb">
+            <li>
+                <i class="i1"></i>
+                <span>采货快</span>
+                <p>白条支付、先提货后付款</p>
+            </li>
+            <li>
+                <i class="i2"></i>
+                <span>随心还</span>
+                <p>随借随还、最长还款期60天</p>
+            </li>
+            <li>
+                <i class="i3"></i>
+                <span>享免息</span>
+                <p>开通即享3天免息</p>
+            </li>
+            <li>
+                <i class="i4"></i>
+                <span>采货快</span>
+                <p>打白条、享优惠</p>
+            </li>
+        </ul>
+    </div>
+    <!-- index-mod8 -->
+    <!-- mod9 -->
+    <div class="mod9 w1200 cc pr">
+        <img src="/static/home/img/mod9.jpg" width="1200" height="230" alt="">
+        <div class="pa mod-sumary">
+            <h2>先提货&nbsp;再还款</h2>
+            <h4>申请项目白条&nbsp;开通账户&nbsp;直接下单采购</h4>
+        </div>
+    </div>
+    <!-- mod9 -->
+    <!-- mod10 -->
+    <div class="mod10 w1200 cc pr mt28">
+        <img src="/static/home/img/mod10.jpg" width="1200" height="230" alt="">
+        <div class="pa mod-sumary">
+            <h2>货物代购&nbsp;在线查询物流状态</h2>
+            <h4>优质货源&nbsp;代找运输&nbsp;物流查询</h4>
+        </div>
+    </div>
+    <!-- mod10 -->
+    <!-- mod11 -->
+    <div class="mod11 w1200 cc pr mt28">
+        <img src="/static/home/img/mod11.jpg" width="1200" height="230" alt="">
+        <div class="pa mod-sumary">
+            <h2>在线还款&nbsp;随时随地查询订单</h2>
+            <h4>订单明细&nbsp;还款明细&nbsp;利息查询</h4>
+        </div>
+    </div>
+    <!-- mod11 -->
+    <!-- mod12 -->
+    <div class="mod12 w1200 cc">
+        <h2>白条申请流程<a href="/project/create" class="btn noTarget isCertify">点击申请</a></h2>
+        <div class="inner-progress w1200"></div>
+    </div>
+    <!-- mod12 -->
+    <!-- mod13 -->
+    <div class="mod13">
+        <h2>申请动态</h2>
+        <ul class="w1200 cc ib-li">
+            <li>
+                {if condition="($param.Needs)"}
+                <span class="total">{$param.Needs|num_format}</span>
+                <p class="text">成功解决项目融资需求（个）</p>
+                {/if}
+            </li>
+            <li>
+                {if condition="($param.Totals)"}
+                <span class="total">{$param.Totals|num_format}</span>
+                <p class="text">平台累计解决融资总额（元）</p>
+                {/if}
+            </li>
+            <li>
+                {if condition="($param.Goods)"}
+                <span class="total">{$param.Goods|num_format}</span>
+                <p class="text">累计代购货物（吨）</p>
+                {/if}
+            </li>
+        </ul>
+    </div>
+    {include file="public/copy"}
+    {include file="public/mask"}
+    {include file="public/sideBar"}
+    <!-- mod13 -->
+    
+    {include file="public/foot-normal"}
+    <script src="//cdn.bootcss.com/layer/2.4/layer.min.js"></script>
+    <script type="text/javascript">
+        
+    ;(function(){
+        
+        // 登录用的
+        var $form = $(".index-form"),
+            $button = $("button[type='submit']", $form);
+            
+        $form.find("input").on("blur", function(){
+            // 清空首尾空格
+            $(this).val($(this).val().trim());
+        });
+        
+        $form.on('submit', function(ev){
+            
+            var $this = $(this);
+    		
+    		$this.find("button[type='submit']").attr('disabled',true).html("登录中");
+    		$.post("{:url('user/doLogin')}", $('.index-form').serialize(), function(res) {
+    			if(res.code === 200 && res.url == "") {
+    				location.replace("/workroom/index");
+    			} else if(res.code === 200 && res.url !== ""){
+    				location.replace(res.url);
+    			} else {
+    				layer.msg(res.msg, {time:1500});
+    				$this.find("button[type='submit']").removeAttr('disabled').html("登录");
+    			}
+    		});
+
+            ev.preventDefault();
+        });
+        	
+    })();
+    </script>
+</body>
+</html>

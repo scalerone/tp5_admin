@@ -1,0 +1,156 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+
+<div class="x_content">
+    <div class="x_content">
+        <br>
+        <form  class="form-horizontal form-label-left" >
+            <input type="hidden" name="id" value="{$data|output='id'}">
+            <input type="hidden" name="uid" value="{$data|output='I_userID'}">
+            <div class="item form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" > 申请人姓名</label>
+                <h5 class="col-md-6 col-sm-6 col-xs-12">
+                    {$data|output='Vc_applicantName'}
+                </h5>
+            </div>
+
+            <div class="item form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">公司名称</label>
+                <h5 class="col-md-6 col-sm-6 col-xs-12">
+                    {$data|output='Vc_name'}
+                </h5>
+            </div>
+            <div class="item form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">公司地址</label>
+                <h5 class="col-md-6 col-sm-6 col-xs-12">
+                  {$data.proname}{$data.cityname}{$data.areaname}{$data.Vc_address}
+                </h5>
+            </div>
+          
+            <div class="item form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">营业执照</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-8 text-center">
+                     {if condition="empty($data.Vc_licence_pic) "}
+			       		 未上传
+			       	{else}
+			       	
+			       		<img  class="img-responsive" src="{$Think.config.img_url}{$data.Vc_licence_pic}" />
+                        <a href="{$Think.config.img_url}{$data.Vc_licence_pic}" target="_blank" > <h2>查看大图</h2></a>
+			       {/if}
+			       
+                    </div>
+                </div>
+            </div>
+            <div class="item form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">组织机构代码证</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-8 text-center">
+                     {if condition="empty($data.Vc_org_pic) "}
+			       		 未上传
+			       	{else}
+                        <img  class="img-responsive" src="{$Think.config.img_url}{$data.Vc_org_pic}" />
+                        <a href="{$Think.config.img_url}{$data.Vc_org_pic}" target="_blank"><h2>查看大图</h2></a>
+                    {/if}
+                    </div>
+                </div>
+            </div>
+            <div class="item form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">税务登记证</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-8 text-center">
+                     {if condition="empty($data.Vc_tax_pic) "}
+			       		 未上传
+			       	{else}
+                        <img  class="img-responsive" src="{$Think.config.img_url}{$data.Vc_tax_pic}" />
+                             <a href="{$Think.config.img_url}{$data.Vc_tax_pic}" target="_blank"><h2>查看大图</h2></a>
+                       {/if}
+                    </div>
+                </div>
+            </div>
+            <div class="item form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">企业认证授权书</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-8 text-center">
+                     {if condition="empty($data.Vc_auth_pic) "}
+			       		 未上传
+			       	{else}
+                    
+                        <img  class="img-responsive" src="{$Think.config.img_url}{$data.Vc_auth_pic}" />
+                       <a href="{$Think.config.img_url}{$data.Vc_auth_pic}" target="_blank"><h2>查看大图</h2></a>
+                    {/if}
+                    </div>
+                </div>
+            </div>
+           
+           
+            <div class="item form-group" }>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">申请时间</label>
+                <h5 class="col-md-6 col-sm-6 col-xs-12">
+                    {$data|output='Createtime'}
+                </h5>
+            </div>
+            
+            <div class="item form-group">
+		         <label class="control-label col-md-3 col-sm-3 col-xs-12">审核状态 <span class="required">*</span></label>
+		         <div class="col-md-6 col-sm-6 col-xs-12">
+		             <div class="radio pull-left">
+		               <label>
+		                 <input value="3" name="approved" type="radio" class="flat "  {if condition="(isetn($data.I_status)==3)"}checked{/if}> 通过
+		               </label>
+		             </div>
+		             <div class="radio pull-left">
+		               <label>
+		                 <input value="2" name="approved" type="radio" class="flat " {if condition="(isetn($data.I_status)==2)"}checked{/if}> 不通过
+		               </label>
+		             </div>
+		            <div>
+		              <div class="Validform_checktip"></div>
+		              </div>
+		         </div>
+     		</div>
+            
+            <div class="clearfix"></div>
+            <div class="ln_solid"></div>
+            <div class="form-group">
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <button onclick="history.go(-1);return false;" class="btn  btn-primary"><i class="fa fa-reply"></i> 取消</button>
+                    <button type="button" class="btn btn-success btn-sub">确认</button> 
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+{include file='public/rightEnd,public/footer' /}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    	
+        $(".btn-sub").on("click", function(){
+        	
+    			layer.confirm('确认审核吗？', {
+    				icon: 3, 
+    				btn: ['确认','取消'], //按钮
+    				title:'提示',
+    			}, function(index){
+      				layer.close(index);
+      				$.post("{:url('/admin/user/edit')}",$("form").serializeArray(),
+      				function(data){
+      					if(null != data.msg || '' != data.msg){
+      						layer.msg(data.msg);
+      					}
+      					
+      				 	if(data.code==200){
+      						setTimeout(function(){window.location.href="{:url('/admin/user/listpage')}";},1000);
+      					}
+      				
+      				});
+    			});
+    		
+    	});
+        
+    }) ;
+</script>

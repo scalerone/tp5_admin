@@ -1,0 +1,155 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+
+<div class="x_content">
+    <div class="table-responsive">
+        <form class="form-horizontal">
+            <div class="input-group col-md-3 col-sm-4 col-xs-12 form-group pull-right">
+                <input type="text" name="uname" id="nameSearch" class="form-control form-param-to" placeholder="用户名/手机号" value="{$param.uname}">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="nameSearchButton">搜索</button>
+                </span>
+            </div>
+           <div class="col-md-2 col-sm-12 col-xs-12 form-group pull-right">
+                <select  x-listen  class="form-control form-param-to" name="certifyStatus">
+                    <option value="-1">认证状态</option>
+                    {volist name="$user->statusArray" id="vo"}
+                    <option value="{$key}" {$key==$param.certifyStatus?"selected":""}>{$vo}</option>
+                    {/volist}
+                </select>
+            </div>
+        </form>
+        <table class="table table-striped jambo_table bulk_action">
+            <thead>
+                <tr class="headings">
+                    <!-- <th>
+                        <input type="checkbox" id="check-all" class="flat"> 
+                    </th>-->
+                    <th class="column-title">ID </th>
+                    <th class="column-title">用户名</th>
+                    <th class="column-title">手机号</th>
+                    <th class="column-title">注册时间</th>
+                    <th class="column-title">认证状态</th>
+                    <th class="column-title">登录时间</th>
+                    <th class="column-title">登录IP</th>
+                    <th class="column-title no-link last"><span class="nobr">操作</span>
+                    </th>
+                    <!-- <th class="bulk-actions" colspan="7">
+                        <a class="antoo" style="color:#fff; font-weight:500;">批量操作 ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                    </th> -->
+                </tr>
+            </thead>
+
+            <tbody>
+                 {volist name="$page->items()" id="vo"}
+                <tr class="even pointer">
+                <!-- 	<td class="a-center ">
+                        <input type="checkbox" class="flat" name="table_records">
+                    </td> -->
+                    <td class=" ">{$vo.id}</td>
+                    <td class=" ">{$vo.uname}</td>
+                    <td class=" ">{$vo.Vc_mobile}</td>
+                    <td class=" ">{$vo.Createtime}</td>
+                    <td class=" ">{$user->statusArray[$vo.I_status]}</td>
+                    <td class=" ">{$vo.Dt_lastlogintime}</td>
+                    <td class=" ">{$vo.Vc_lastloginIP}</td>
+                    <td class=" last">
+            
+              
+               {if condition="(checkPopedom('/admin/user/info')) "}
+                <a href="{:url('/admin/user/info',['id'=>$vo.id])}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> 查看详情</a>
+                {/if}
+                
+               	
+            		
+              {if condition="(checkPopedom('/admin/user/changeAjax')) "}
+                {if condition="($vo.I_islock===1) "}
+                <a href="javascript:void(0);" class="btn  btn-success btn-xs btn-change-approved" id_val="{$vo.id}" st_val="0"><i class="fa fa-pencil"></i> 解冻</a>
+                {else}
+                <a href="javascript:void(0);" class="btn btn-warning btn-xs btn-change-approved" id_val="{$vo.id}" st_val="1"><i class="fa fa-pencil"></i> 冻结</a>
+                {/if}
+              {/if}
+              	{if condition="(checkPopedom('/admin/user/delAjax')) "}
+               		       {if condition="($vo.I_status!=3) "}
+               		
+                <a href="javascript:void(0);" data-href="{:url('/admin/user/delAjax',['id'=>$vo.id])}"  class="btn btn-danger btn-xs js-ajax-delete"  ><i class="fa fa-trash-o"></i> 删除 </a>
+            		{/if}
+            		{/if}
+              
+              <br>
+              
+              
+            			{if condition="(checkPopedom('/admin/user/edit')) "}
+            			{if condition="($vo.I_status==5) "}
+                <a href="{:url('/admin/user/edit',['id'=>$vo.id])}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> 认证审核</a>
+                		 {/if}
+               		{/if}
+            		
+            
+                
+             
+                    </td>
+                </tr>
+                
+                {/volist}
+            </tbody>
+        </table>
+    </div>
+    {$page->render()}
+</div>
+
+
+{include file='public/rightEnd,public/footer' /}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('select[x-listen]').change(onListPageSelectionChange) ;
+        
+        $('#nameSearchButton').click(function(){
+            var name = $('#nameSearch').val() ,
+                url = new xxx.Url().removeParam('page') ;
+            
+            url.setParam('uname',encodeURIComponent(name)).go() ;
+        }) ;
+        
+        
+        $(".btn-change-approved").bind('click',function(){
+    		if($(this).attr("sending")==1){
+    			return;
+    		}
+    		var id_val = parseInt($(this).attr('id_val'));
+    		var st_val = parseInt($(this).attr('st_val'));
+    		if(id_val>0){
+    			$(this).attr("sending",1);
+    			
+    			layer.confirm('确认要更改吗？', {
+    				icon: 3, 
+    				btn: ['确认','取消'], //按钮
+    				title:'提示',
+    			}, function(index){
+      				layer.close(index);
+      				$.getJSON("{:url('/admin/user/changeAjax')}",{id:id_val,st:st_val},
+      				function(data){
+      					if(null != data.msg || '' != data.msg){
+      						layer.msg(data.msg);
+      					}
+      					
+      					if(data.code==200){
+      						location.reload();
+      					}else if(null != data.url || '' != data.url){
+    						window.location.href = data.url;
+    					}
+      					$(this).removeAttr("sending");
+      				});
+    			});
+    		}
+    	});
+        
+        
+        
+        
+        
+        
+        
+    }) ;
+</script>

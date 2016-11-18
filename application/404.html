@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>404</title>
+</head>
+<body>
+  
+    <div class="error-page w1200 cc pr">
+        <div class="bg"><img src="/static/home/img/404.png"></div>
+        <div class="auto">
+            <div class="text"><img src="/static/home/img/fly.png"></div>
+            <div class="auto-go"><img src="/static/home/img/clock.png"><em class="time">3</em>秒后自动返航</div>
+        </div>
+        <a class="go" href="/index"><img src="/static/home/img/go.png"></a>
+    </div>    
+
+    <!-- mod13 -->
+
+    <script type="text/javascript">
+		$(".time").on("counter", function(){
+            var $this = $(this),
+                time = 3;
+            var timer = setInterval(function(){
+                $this.html(--time);
+                if(time <= 0) {
+                    clearInterval(timer);
+                    location.replace('/index');
+                }
+            },1000);
+        }).trigger('counter');   
+    </script>
+</body>
+</html>

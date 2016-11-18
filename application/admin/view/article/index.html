@@ -1,0 +1,146 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+
+<div class="x_content">
+	<div class="table-responsive">
+		<form class="form-horizontal">
+			<div class="col-md-2 col-sm-12 col-xs-12 form-group">
+				{if condition="(checkPopedom('/admin/article/add')) "}
+				<a href="{:url('/admin/article/add')}" class="btn btn-sm btn-success" ><i class="fa fa-plus-square"></i> 新增</a>
+				{/if}
+			</div>
+			<form class="form-horizontal">
+				<div class="input-group col-md-3 col-sm-4 col-xs-12 form-group pull-right">
+					<input type="text" name="keywords" id="nameSearch" class="form-control form-param-to" placeholder="文章名" value="{$param.keywords}">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="nameSearchButton">搜索</button>
+                </span>
+				</div>
+				<div class="col-md-2 col-sm-12 col-xs-12 form-group pull-right">
+					<select  x-listen  class="form-control form-param-to" name="classID">
+						<option value="0">栏目</option>
+						{volist name="class" id="vo"}
+						<option value="{$vo.id}" {$vo.id==$param.classID?"selected":""}>{$vo.Vc_name}</option>
+						{/volist}
+					</select>
+				</div>
+			</form>
+
+		</form>
+		<table class="table table-striped jambo_table bulk_action">
+			<thead>
+			<tr class="headings">
+				<!-- <th>
+                    <input type="checkbox" id="check-all" class="flat">
+                </th> -->
+				<th class="column-title">ID </th>
+				<th class="column-title">文章</th>
+				<th class="column-title">简介</th>
+				<th class="column-title">栏目</th>
+				<th class="column-title">发布时间</th>
+				<th class="column-title">排序</th>
+				<th class="column-title">创建时间 </th>
+				<th class="column-title no-link last"><span class="nobr">操作</span>
+				</th>
+			</tr>
+			</thead>
+
+			<tbody>
+			{volist name="$page->items()" id="vo"}
+			<tr class="even pointer">
+				<td class=" ">{$vo.id}</td>
+				<td class=" ">{$vo.Vc_name|cutstrnohtml=16}</td>
+				<td class=" ">{$vo.Vc_intro|cutstrnohtml=16}</td>
+				<td class=" ">{$vo.classname|cutstrnohtml=16}</td>
+				<td class=" ">{$vo.D_releasetime}</td>
+				<td class=" ">{$vo.I_order}</td>
+				<td class=" ">{$vo.Createtime}</td>
+				<td class=" last">
+					{if condition="(checkPopedom('/admin/article/edit')) "}
+					<a href="{:url('admin/article/edit',['id'=>$vo.id])}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> 编辑</a>
+					{/if}
+					{if condition="(checkPopedom('/admin/article/del') && $vo.I_dodel==1) "}
+					<a href="javascript:void(0);" data-href="{:url('admin/article/del',['id'=>$vo.id])}"  class="btn btn-danger btn-xs js-ajax-delete"  ><i class="fa fa-trash-o"></i> 删除 </a>
+					{/if}
+				</td>
+			</tr>
+			{/volist}
+			</tbody>
+		</table>
+	</div>
+	{$page->render()}
+</div>
+
+
+{include file='public/rightEnd,public/footer' /}
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
+
+		$('select[x-listen]').change(onListPageSelectionChange) ;
+		$('#nameSearchButton').click(function(){
+			var name = $('#nameSearch').val() ,
+					url = new xxx.Url().removeParam('page') ;
+
+			url.setParam('keywords',encodeURIComponent(name)).go() ;
+		}) ;
+
+
+	}) ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/*
+	 $(function(){
+	 var _isld=0;
+
+	 $('a.js-ajax-delete').click(function(){
+
+	 if(_isld==1){layer.msg('提交中...请稍等片刻！');return false;}
+	 var href=$(this).attr('data-href');
+	 layer.confirm('确认要删除吗？', {
+	 icon: 3,
+	 btn: ['确认','取消'], //按钮
+	 title:'提示',
+	 }, function(index){
+	 layer.close(index);
+	 _isld=1;
+
+	 $.getJSON(href, function(v){
+	 layer.msg(v.msg) ;
+	 _isld=0;
+	 if(v.code==200){
+	 setTimeout(function(){window.location.reload()},1000);
+
+	 }
+	 });
+
+	 });
+
+
+
+	 });
+
+
+
+
+	 });*/
+
+</script>
+
+
+
+
+

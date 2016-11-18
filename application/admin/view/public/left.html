@@ -1,0 +1,140 @@
+    
+       
+       
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="index.html" class="site_title"><!-- <i class="fa fa-paw"></i> --> <span>管理中心</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile">
+              <div class="profile_pic">
+                <img src="/static/admin/images/user.png" alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>欢迎您！</span>
+                <h2>{$user_ses|output='userName'}</h2>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br />
+            
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <h3>&nbsp;</h3>
+                <ul class="nav side-menu">
+                <li><a href="{:url('/admin/login/index')}"><i class="fa fa-home"></i>总览 </a></li>
+                <!-- 菜单 --> 
+                {if condition="(iset($menus_ses)) "}             
+	                {volist name="menus_ses" id="vo1"}
+	                   	{if condition="($vo1.parentId==0 && $vo1.leftShow==1) "}
+                             <li><a><i class="fa fa-{$vo1.menuIcon}"></i>{$vo1.showName} <span class="fa fa-chevron-down"></span></a>
+                               <ul class="nav child_menu">
+                               {if condition="(output($vo1,'leftMenus')) "}
+	                               {volist name="vo1.leftMenus" id="vo2"}
+	                               {if condition="($vo2.leftShow==1) "}
+	                                 <li><a href="{:url($vo2.menuUrl)}" data-routers="{$vo2|output='dataRouters'}">{$vo2.showName}</a></li>
+	                               {/if}
+	                               {/volist}
+                               {/if}
+                               </ul>
+                             </li>
+	                 	{/if}
+	           		{/volist}
+                {/if}
+                </ul>
+                <!-- 删除下面的  -->  
+
+                <!-- <ul class="nav side-menu">
+                 
+                  <li><a><i class="fa fa-cog"></i>系统设置 <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{:url('/configure/listPage')}" data-routers="{:url('/configure/listPage')},{:url('/configure/add')},{:url('/configure/edit')}" >系统参数设置</a></li>
+                      <li><a href="{:url('/menu/listPage')}" data-routers="{:url('/menu/listPage')},{:url('/menu/add')},{:url('/menu/edit')}" >后台菜单</a></li>
+                     <li><a href="{:url('/admin/rbac/listPage')}" data-routers="{:url('/admin/rbac/listPage')},{:url('/admin/rbac/add')},{:url('/admin/rbac/edit')},{:url('/admin/rbac/authorize')}" >角色管理</a></li>
+                     <li><a href="{:url('/admin/adminuser/showlist')}" data-routers="{:url('/admin/adminuser/showlist')},{:url('/admin/adminuser/add')},{:url('/admin/adminuser/edit')},{:url('/admin/adminuser/info')}">管理员</a></li>
+                     <li><a href="{:url('/admin/adminandroid/listPage')}" data-routers="{:url('/admin/adminandroid/listPage')},{:url('/admin/adminandroid/info')}" >一体机权限管理</a></li>
+                     <li><a href="{:url('/admin/content/index')}" data-routers="{:url('/admin/content/index')},{:url('/admin/content/add')},{:url('/admin/content/edit')}">平台内容管理</a></li>
+
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-group "></i>会员管理 <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{:url('/admin/user/listPage')}" data-routers="{:url('/admin/user/listPage')},{:url('/admin/user/info')},{:url('/order/listPageU')}" >会员列表</a></li>
+                      <li><a href="{:url('/admin/message/index')}" data-routers="{:url('/admin/message/add')},{:url('/admin/message/edit')}" >信息管理</a></li>
+
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-file-text"></i>订单管理 <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{:url('/admin/order/listPage')}" data-routers="{:url('/admin/order/listPage')},{:url('/admin/order/info')}" >供灯订单</a></li>
+                      <li><a href="{:url('/admin/donation/listPage')}" data-routers="{:url('/admin/donation/listPage')},{:url('/admin/donation/info')}" >随喜订单</a></li>
+                      
+                    </ul>
+                  </li>
+                  
+                  <li><a><i class="fa fa-bank"></i>寺院管理 <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{:url('/temple/index')}" data-routers="{:url('/temple/index')},{:url('/temple/add')},{:url('/temple/edit')},{:url('/buddha_data/index')},{:url('/buddha_data/add')},{:url('/buddha_data/edit')}
+                      ,{:url('/palace/index')},{:url('/palace/add')},{:url('/palace/edit')},{:url('/mage/index')},{:url('/mage/add')},{:url('/mage/edit')},{:url('/buddha/form')},
+                      {:url('/buddha/listPage')},{:url('/palace_pic/listPage')},{:url('/palace_pic/add')},{:url('/palace_pic/edit')},{:url('/price/index')},{:url('/price/add')},{:url('/price/edit')},{:url('/seminar/index')},{:url('/seminar/add')},{:url('/seminar/edit')}
+                      ,{:url('/temple_show/index')},{:url('/temple_show/add')},{:url('/temple_show/edit')},{:url('/worship_type/listPage')},{:url('/worship_type/form')}">寺院管理</a></li>
+                      <li><a href="{:url('/worship_period/index')}" data-routers="{:url('/worship_period/index')},{:url('/worship_period/add')},{:url('/worship_period/edit')}">供奉期</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-bell"></i>灯控制管理<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{:url('/android/listPage')}" data-routers="{:url('/android/listPage')},{:url('/android/form')}">一体机管理</a></li>
+                      <li><a href="{:url('/subarea/listPage')}" data-routers="{:url('/subarea/listPage')},{:url('/subarea/add')},{:url('/subarea/edit')}">分区管理</a></li>
+                      <li><a href="{:url('/lamp_type/index')}" data-routers="{:url('/lamp_type/index')},{:url('/lamp_type/add')},{:url('/lamp_type/edit')}">灯类型</a></li>
+                      <li><a href="{:url('/ctrler/listPage')}" data-routers="{:url('/ctrler/listPage')},{:url('/ctrler/add')},{:url('/ctrler/edit')}">控制器管理</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-tasks"></i>信息管理 <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{:url('/worship/listPage')}" data-routers="{:url('/worship/listPage')}" >供奉信息</a></li>
+                      <li><a href="{:url('/badword/listPage')}" data-routers="{:url('/badword/listPage')},{:url('/badword/add')},{:url('/badword/edit')}" >坏词管理</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-bar-chart"></i>统计管理 <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{:url('/stat/light')}" data-routers="{:url('/stat/light')}" >供灯统计</a></li>
+                      <li><a href="{:url('/stat/group')}" data-routers="{:url('/stat/group')}" >分组统计</a></li>
+                      <li><a href="{:url('/stat/donation')}" data-routers="{:url('/stat/donation')}" >随喜统计</a></li>
+                    </ul>
+                  </li>
+                </ul> -->
+                
+              </div>
+
+            </div>
+            <!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+            <div class="sidebar-footer hidden-small">
+              <!-- <a data-toggle="tooltip" data-placement="top" title="Settings">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="Lock">
+                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+              </a> -->
+              <a href="{:url('/login/clearcache')}" data-toggle="tooltip" data-placement="top" title="清除网站缓存">
+                <span class="fa fa-refresh" aria-hidden="true"></span>
+              </a>
+              <a href="{:url('/login/loginout')}" data-toggle="tooltip" data-placement="top" title="退出">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+              </a>
+            </div>
+            <!-- /menu footer buttons -->
+          </div>
+        </div>
+        
+        

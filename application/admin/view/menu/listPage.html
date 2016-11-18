@@ -1,0 +1,54 @@
+{include file='public/header,public/left,public/top,public/rightStart' /}
+
+
+                <div class="x_content">
+                    <div class="table-responsive">
+	                    <div class="col-md-2 col-sm-12 col-xs-12 form-group">
+	                    <a href="{:url('/admin/menu/add')}" class="btn btn-sm btn-success" ><i class="fa fa-plus-square"></i> 新增</a>
+	                    </div>
+                        <table class="table table-striped jambo_table bulk_action" id="menus-table">
+                        <thead>
+							<tr class="headings">
+								
+								<th class="column-title">排序 </th>
+								<th class="column-title">ID </th>
+								<th class="column-title">链接地址 </th>
+								<th class="column-title">菜单名称 </th>
+								<th class="column-title">显示名称 </th>
+								<th class="column-title">是否左侧菜单</th>
+								<th class="column-title">创建时间 </th>
+								<th class="column-title no-link last"><span class="nobr">操作</span>
+								</th>
+								
+							</tr>
+                        </thead>
+
+                        <tbody>
+                            {$categorys}
+                        </tbody>
+                        </table>
+                    </div>
+                  
+                </div>
+      
+
+
+{include file='public/rightEnd,public/footer' /}
+
+<script>
+		$(document).ready(function() {
+			Wind.css('treeTable');
+			Wind.use('treeTable', function() {
+				$("#menus-table").treeTable({
+					indent : 20
+				});
+			});
+		});
+
+		
+	</script>
+
+
+
+
+
